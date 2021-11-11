@@ -1,0 +1,497 @@
+﻿  SingleImgTest.cpp
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(484,1): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(509,95): warning C4244: “参数”: 从“_Tp”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=double
+          ]
+          and
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(509,52): warning C4244: “参数”: 从“_Tp”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=double
+          ]
+          and
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(518,93): warning C4244: “参数”: 从“_Tp”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=double
+          ]
+          and
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(518,50): warning C4244: “参数”: 从“_Tp”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=double
+          ]
+          and
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(565,1): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(575,70): warning C4244: “参数”: 从“double”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(575,45): warning C4244: “参数”: 从“double”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(592,1): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(596,1): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(601,1): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(612,71): warning C4244: “参数”: 从“double”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(612,46): warning C4244: “参数”: 从“double”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(675,1): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(676,1): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(695,1): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(696,1): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(709,67): warning C4244: “参数”: 从“double”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(709,42): warning C4244: “参数”: 从“double”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(769,1): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(779,102): warning C4244: “参数”: 从“double”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(779,61): warning C4244: “参数”: 从“double”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(798,118): warning C4244: “参数”: 从“double”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(798,71): warning C4244: “参数”: 从“double”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(832,97): warning C4244: “参数”: 从“_Tp”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=double
+          ]
+          and
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(832,56): warning C4244: “参数”: 从“_Tp”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=double
+          ]
+          and
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(1011,1): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(1012,1): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(1058,1): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(1059,1): warning C4267: “参数”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(1130,1): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(1156,1): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(1164,1): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(1179,1): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(1193,1): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(1215,1): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(1223,1): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(1233,1): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(1263,1): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(1293,1): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(1301,1): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(1309,1): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(1356,1): warning C4305: “=”: 从“double”到“float”截断
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(1359,1): warning C4305: “=”: 从“double”到“float”截断
+C:\mycode\circlecalibTest\SingleImgTest\CaliStruct.h(1362,1): warning C4305: “=”: 从“double”到“float”截断
+C:\mycode\circlecalibTest\SingleImgTest\SubPixEdge.h(3,1): warning C4005: “_CRT_SECURE_NO_WARNINGS”: 宏重定义
+C:\mycode\circlecalibTest\SingleImgTest\SingleImgTest.cpp : message : 参见“_CRT_SECURE_NO_WARNINGS”的前一个定义
+C:\mycode\circlecalibTest\SingleImgTest\CommonOperation.h(403,1): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CommonOperation.h(404,1): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CommonOperation.h(406,1): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CommonOperation.h(407,1): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CommonOperation.h(470,42): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CommonOperation.h(471,41): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CommonOperation.h(499,34): warning C4244: “参数”: 从“float”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=int
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CommonOperation.h(499,29): warning C4244: “参数”: 从“float”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=int
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CommonOperation.h(499,50): warning C4244: “参数”: 从“float”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=int
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CommonOperation.h(499,45): warning C4244: “参数”: 从“float”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=int
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CommonOperation.h(500,32): warning C4244: “参数”: 从“float”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=int
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CommonOperation.h(500,28): warning C4244: “参数”: 从“float”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=int
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CommonOperation.h(500,48): warning C4244: “参数”: 从“float”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=int
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CommonOperation.h(500,44): warning C4244: “参数”: 从“float”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=int
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CommonOperation.h(506,42): warning C4244: “参数”: 从“float”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=int
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CommonOperation.h(506,37): warning C4244: “参数”: 从“float”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=int
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CommonOperation.h(529,30): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CommonOperation.h(544,25): warning C4244: “=”: 从“int”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CommonOperation.h(545,25): warning C4244: “=”: 从“int”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CommonOperation.h(566,43): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CommonOperation.h(624,31): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CommonOperation.h(643,47): warning C4244: “参数”: 从“double”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CommonOperation.h(643,32): warning C4244: “参数”: 从“double”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CommonOperation.h(644,72): warning C4244: “参数”: 从“double”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=int
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CommonOperation.h(644,57): warning C4244: “参数”: 从“double”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=int
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CommonOperation.h(645,18): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CommonOperation.h(665,59): warning C4244: “参数”: 从“double”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CommonOperation.h(665,44): warning C4244: “参数”: 从“double”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CommonOperation.h(707,33): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CommonOperation.h(716,32): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CommonOperation.h(726,60): warning C4244: “参数”: 从“int”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CommonOperation.h(726,28): warning C4244: “参数”: 从“int”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleDetector.h(52,48): warning C4244: “参数”: 从“double”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleDetector.h(52,42): warning C4244: “参数”: 从“double”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleDetector.h(64,28): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CircleDetector.h(65,37): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CircleDetector.h(79,27): warning C4244: “初始化”: 从“unsigned __int64”转换到“float”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CircleDetector.h(80,25): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CircleDetector.h(95,20): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CircleDetector.h(140,50): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CircleDetector.h(161,30): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CircleDetector.h(164,18): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CircleDetector.h(165,18): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CircleDetector.h(166,16): warning C4244: “初始化”: 从“double”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(186,16): warning C4244: “初始化”: 从“_Tp”转换到“float”，可能丢失数据
+          with
+          [
+              _Tp=int
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(186,33): warning C4244: “初始化”: 从“_Tp”转换到“float”，可能丢失数据
+          with
+          [
+              _Tp=int
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(224,16): warning C4244: “初始化”: 从“_Tp”转换到“float”，可能丢失数据
+          with
+          [
+              _Tp=int
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(224,39): warning C4244: “初始化”: 从“_Tp”转换到“float”，可能丢失数据
+          with
+          [
+              _Tp=int
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(224,62): warning C4244: “初始化”: 从“_Tp”转换到“float”，可能丢失数据
+          with
+          [
+              _Tp=int
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(225,16): warning C4244: “初始化”: 从“_Tp”转换到“float”，可能丢失数据
+          with
+          [
+              _Tp=int
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(225,39): warning C4244: “初始化”: 从“_Tp”转换到“float”，可能丢失数据
+          with
+          [
+              _Tp=int
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(225,62): warning C4244: “初始化”: 从“_Tp”转换到“float”，可能丢失数据
+          with
+          [
+              _Tp=int
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(280,85): warning C4244: “参数”: 从“_Tp”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=double
+          ]
+          and
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(280,44): warning C4244: “参数”: 从“_Tp”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=double
+          ]
+          and
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(281,53): warning C4244: “=”: 从“double”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(282,53): warning C4244: “=”: 从“double”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(348,16): warning C4244: “初始化”: 从“_Tp”转换到“float”，可能丢失数据
+          with
+          [
+              _Tp=int
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(348,34): warning C4244: “初始化”: 从“_Tp”转换到“float”，可能丢失数据
+          with
+          [
+              _Tp=int
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(394,85): warning C4244: “参数”: 从“_Tp”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=double
+          ]
+          and
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(394,44): warning C4244: “参数”: 从“_Tp”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=double
+          ]
+          and
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(395,54): warning C4244: “=”: 从“double”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(396,54): warning C4244: “=”: 从“double”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(424,89): warning C4244: “参数”: 从“_Tp”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=double
+          ]
+          and
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(424,48): warning C4244: “参数”: 从“_Tp”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=double
+          ]
+          and
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(425,58): warning C4244: “=”: 从“double”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(426,58): warning C4244: “=”: 从“double”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(509,31): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(509,55): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(599,31): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(599,55): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(666,16): warning C4244: “初始化”: 从“_Tp”转换到“float”，可能丢失数据
+          with
+          [
+              _Tp=int
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(666,34): warning C4244: “初始化”: 从“_Tp”转换到“float”，可能丢失数据
+          with
+          [
+              _Tp=int
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(696,34): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(741,34): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(788,93): warning C4244: “参数”: 从“int”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(788,49): warning C4244: “参数”: 从“int”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(789,93): warning C4244: “参数”: 从“int”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(789,49): warning C4244: “参数”: 从“int”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(790,93): warning C4244: “参数”: 从“int”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(790,49): warning C4244: “参数”: 从“int”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(791,93): warning C4244: “参数”: 从“int”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(791,49): warning C4244: “参数”: 从“int”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(792,93): warning C4244: “参数”: 从“int”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(792,49): warning C4244: “参数”: 从“int”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(793,103): warning C4244: “参数”: 从“int”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\CircleBoardDetector.h(793,54): warning C4244: “参数”: 从“int”转换到“_Tp”，可能丢失数据
+          with
+          [
+              _Tp=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\SingleImgTest.cpp(630,25): warning C4305: “=”: 从“double”到“float”截断
+C:\mycode\circlecalibTest\SingleImgTest\SingleImgTest.cpp(638,24): warning C4305: “=”: 从“double”到“float”截断
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC\14.29.30133\include\utility(318,39): warning C4244: “=”: 从“_Ty”转换到“_Ty1”，可能丢失数据
+          with
+          [
+              _Ty=double
+          ]
+          and
+          [
+              _Ty1=float
+          ]
+C:\mycode\circlecalibTest\SingleImgTest\SingleImgTest.cpp(656): message : 查看对正在编译的函数 模板 实例化“std::pair<float,cv::Size> &std::pair<float,cv::Size>::operator =<double,cv::Size_<int>,0>(std::pair<double,cv::Size_<int>> &&) noexcept”的引用
+C:\mycode\circlecalibTest\SingleImgTest\SingleImgTest.cpp(656): message : 查看对正在编译的函数 模板 实例化“std::pair<float,cv::Size> &std::pair<float,cv::Size>::operator =<double,cv::Size_<int>,0>(std::pair<double,cv::Size_<int>> &&) noexcept”的引用
+  正在生成代码
+  4 of 2192 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    4 functions had inline decision re-evaluated but remain unchanged
+  已完成代码的生成
+  SingleImgTest.vcxproj -> C:\mycode\circlecalibTest\CircleCalib\x64\Release\SingleImgTest.exe
