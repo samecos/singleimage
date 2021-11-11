@@ -1,13 +1,10 @@
 ﻿#pragma once
 
 #include "CaliStruct.h"
-
 #define _CRT_SECURE_NO_WARNINGS
-
 #ifndef FALSE
 #define FALSE 0
 #endif /* !FALSE */
-
 #ifndef TRUE
 #define TRUE 1
 #endif /* !TRUE */
@@ -15,7 +12,7 @@
 /*----------------------------------------------------------------------------*/
 /* fatal error, print a message to standard error and exit
 */
-/* static */ void error(const char* msg)
+/* static */ void error(const char *msg)
 {
 	fprintf(stderr, "error: %s\n", msg);
 	exit(EXIT_FAILURE);
@@ -35,9 +32,9 @@
 
 /* open file, print an error and exit if fail
 */
-/* static */ FILE* xfopen(const char* path, const char* mode)
+/* static */ FILE *xfopen(const char *path, const char *mode)
 {
-	FILE* f = fopen(path, mode);
+	FILE *f = fopen(path, mode);
 	if (f == NULL)
 	{
 		fprintf(stderr, "error: unable to open file '%s'\n", path);
@@ -48,20 +45,22 @@
 
 /* close file, print an error and exit if fail
 */
-/* static */ int xfclose(FILE* f)
+/* static */ int xfclose(FILE *f)
 {
-	if (fclose(f) == EOF) error("unable to close file");
+	if (fclose(f) == EOF)
+		error("unable to close file");
 	return 0;
 }
 
 /* skip white characters and comments in a PGM file
 */
-/* static */ void skip_whites_and_comments(FILE* f)
+/* static */ void skip_whites_and_comments(FILE *f)
 {
 	int c;
 	do
 	{
-		while (isspace(c = getc(f))); /* skip spaces */
+		while (isspace(c = getc(f)))
+			;		  /* skip spaces */
 		if (c == '#') /* skip comments */
 			while (c != '\n' && c != '\r' && c != EOF)
 				c = getc(f);
@@ -72,14 +71,17 @@
 
 /* read a number in ASCII from a PGM file
 */
-/* static */ int get_num(FILE* f)
+/* static */ int get_num(FILE *f)
 {
 	int num, c;
 
-	while (isspace(c = getc(f)));
-	if (!isdigit(c)) error("corrupted PGM or PPM file.");
+	while (isspace(c = getc(f)))
+		;
+	if (!isdigit(c))
+		error("corrupted PGM or PPM file.");
 	num = c - '0';
-	while (isdigit(c = getc(f))) num = 10 * num + c - '0';
+	while (isdigit(c = getc(f)))
+		num = 10 * num + c - '0';
 	if (c != EOF && ungetc(c, f) == EOF)
 		error("unable to 'ungetc' while reading PGM file.");
 
@@ -87,45 +89,54 @@
 }
 
 /* memory allocation, print an error and exit if fail*/
-void* xmalloc(size_t size)
+void *xmalloc(size_t size)
 {
-	void* p;
-	if (size == 0) error((char*)"xmalloc: zero size");
+	void *p;
+	if (size == 0)
+		error((char *)"xmalloc: zero size");
 	p = malloc(size);
-	if (p == NULL) error((char*)"xmalloc: out of memory");
+	if (p == NULL)
+		error((char *)"xmalloc: out of memory");
 	return p;
 }
 
 /* read a PGM image file
 */
-double* read_pgm_image(char* name, int* X, int* Y)
+double *read_pgm_image(char *name, int *X, int *Y)
 {
-	FILE* f;
+	FILE *f;
 	int i, n, depth, bin = FALSE;
-	double* image;
+	double *image;
 
 	/* open file */
 	f = xfopen(name, "rb"); /* open to read as a binary file (b option). otherwise,
 							in some systems, it may behave differently */
 
-							/* read header */
-	if (getc(f) != 'P') error("not a PGM file!");
-	if ((n = getc(f)) == '2') bin = FALSE;
-	else if (n == '5') bin = TRUE;
-	else error("not a PGM file!");
+	/* read header */
+	if (getc(f) != 'P')
+		error("not a PGM file!");
+	if ((n = getc(f)) == '2')
+		bin = FALSE;
+	else if (n == '5')
+		bin = TRUE;
+	else
+		error("not a PGM file!");
 	skip_whites_and_comments(f);
-	*X = get_num(f);               /* X size */
+	*X = get_num(f); /* X size */
 	skip_whites_and_comments(f);
-	*Y = get_num(f);               /* Y size */
+	*Y = get_num(f); /* Y size */
 	skip_whites_and_comments(f);
-	depth = get_num(f);            /* pixel depth */
-	if (depth < 0) error("pixel depth < 0, unrecognized PGM file");
-	if (bin && depth > 255) error("pixel depth > 255, unrecognized PGM file");
+	depth = get_num(f); /* pixel depth */
+	if (depth < 0)
+		error("pixel depth < 0, unrecognized PGM file");
+	if (bin && depth > 255)
+		error("pixel depth > 255, unrecognized PGM file");
 	/* white before data */
-	if (!isspace(getc(f))) error("corrupted PGM file.");
+	if (!isspace(getc(f)))
+		error("corrupted PGM file.");
 
 	/* get memory */
-	image = (double*)xmalloc(*X * *Y * sizeof(double));
+	image = (double *)xmalloc(*X * *Y * sizeof(double));
 
 	/* read data */
 	for (i = 0; i < (*X * *Y); i++)
@@ -141,32 +152,42 @@ double* read_pgm_image(char* name, int* X, int* Y)
 /*----------------------------------------------------------------------------*/
 /* read a 2D ASC format file
 */
-double* read_asc_file(char* name, int* X, int* Y)
+double *read_asc_file(char *name, int *X, int *Y)
 {
-	FILE* f;
+	FILE *f;
 	int i, n, Z, C;
 	double val;
-	double* image;
+	double *image;
 
-	/* open file */
-	f = xfopen(name, "rb"); /* open to read as a binary file (b option). otherwise,
-							in some systems, it may behave differently */
+	char line[512];
+	ifstream myfile(name);
+	myfile.getline(line, 512);
+	// /* open file */
+	// f = xfopen(name, "rb"); /* open to read as a binary file (b option). otherwise,in some systems, it may behave differently */
+	// /* read header */
+	// n = fscanf_s(f, "%d%*c%d%*c%d%*c%d", X, Y, &Z, &C);
+	istringstream iss(line);
+	iss >> *X >> *Y >> Z >> C;
 
-							/* read header */
-	n = fscanf_s(f, "%d%*c%d%*c%d%*c%d", X, Y, &Z, &C);
-	if (n != 4 || *X <= 0 || *Y <= 0 || Z <= 0 || C <= 0) error("invalid ASC file");
+	if (n != 4 || *X <= 0 || *Y <= 0 || Z <= 0 || C <= 0)
+		error("invalid ASC file");
 
 	/* only gray level images are handled */
-	if (Z != 1 || C != 1) error("only single channel ASC files are handled");
+	if (Z != 1 || C != 1)
+		error("only single channel ASC files are handled");
 
 	/* get memory */
-	image = (double*)xmalloc(*X * *Y * Z * C * sizeof(double));
+	image = (double *)xmalloc(*X * *Y * Z * C * sizeof(double));
 
 	/* read data */
 	for (i = 0; i < (*X * *Y * Z * C); i++)
 	{
-		n = fscanf_s(f, "%lf", &val);
-		if (n != 1) error("invalid ASC file");
+		myfile.getline(line, 512);
+		iss.clear();
+		iss >> val;
+		//n = fscanf_s(f, "%lf", &val);
+		if (n != 1)
+			error("invalid ASC file");
 		image[i] = val;
 	}
 
@@ -179,10 +200,10 @@ double* read_asc_file(char* name, int* X, int* Y)
 /*----------------------------------------------------------------------------*/
 /* read an image from a file in ASC or PGM formats
 */
-double* read_image(char* name, int* X, int* Y)
+double *read_image(char *name, int *X, int *Y)
 {
 	int n = (int)strlen(name);
-	char* ext = name + n - 4;
+	char *ext = name + n - 4;
 
 	if (n >= 4 && (strcmp(ext, ".asc") == 0 || strcmp(ext, ".ASC") == 0))
 		return read_asc_file(name, X, Y);
@@ -194,10 +215,10 @@ double* read_image(char* name, int* X, int* Y)
 /* write curves into a PDF file. the output is PDF version 1.4 as described in
 "PDF Reference, third edition" by Adobe Systems Incorporated, 2001
 */
-void write_curves_pdf(double* x, double* y, int* curve_limits, int M,
-	char* filename, int X, int Y, double width)
+void write_curves_pdf(double *x, double *y, int *curve_limits, int M,
+					  char *filename, int X, int Y, double width)
 {
-	FILE* pdf;
+	FILE *pdf;
 	long start1, start2, start3, start4, start5, startxref, stream_len;
 	int i, j, k;
 
@@ -208,17 +229,19 @@ void write_curves_pdf(double* x, double* y, int* curve_limits, int M,
 	// std::cout << "************************************************" << std::endl;
 
 	/* check input */
-	if (filename == NULL) error("invalid filename in write_curves_pdf");
+	if (filename == NULL)
+		error("invalid filename in write_curves_pdf");
 	if (M > 0 && (x == NULL || y == NULL || curve_limits == NULL))
 		error("invalid curves data in write_curves_pdf");
-	if (X <= 0 || Y <= 0) error("invalid image size in write_curves_pdf");
+	if (X <= 0 || Y <= 0)
+		error("invalid image size in write_curves_pdf");
 
 	/* open file */
 	pdf = xfopen(filename, "wb"); /* open to write as a binary file (b option).
 								  otherwise, in some systems,
 								  it may behave differently */
 
-								  /* PDF header */
+	/* PDF header */
 	fprintf(pdf, "%%PDF-1.4\n");
 	/* The following PDF comment contains characters with ASCII codes greater
 	than 128. This helps to classify the file as containing 8-bit binary data.
@@ -243,7 +266,7 @@ void write_curves_pdf(double* x, double* y, int* curve_limits, int M,
 	fprintf(pdf, "stream\n");
 	stream_len = ftell(pdf);
 	fprintf(pdf, "%.4f w\n", width); /* set line width */
-	for (k = 0; k < M; k++) /* write curves */
+	for (k = 0; k < M; k++)			 /* write curves */
 	{
 		/* an offset of 0.5,0.5 is added to point coordinates so that the
 		drawing has the right positioning when superposed on the image
@@ -262,13 +285,14 @@ void write_curves_pdf(double* x, double* y, int* curve_limits, int M,
 
 		/* if the curve is closed, market as such */
 		j = curve_limits[k + 1] - 1;
-		if (x[i] == x[j] && y[i] == y[j]) fprintf(pdf, "h\n");
+		if (x[i] == x[j] && y[i] == y[j])
+			fprintf(pdf, "h\n");
 
 		/* end curve - stroke! */
 		fprintf(pdf, "S\n");
 	}
 	stream_len = ftell(pdf) - stream_len; /* store stream length */
-	fprintf(pdf, "\r\nendstream\n"); /* EOL must be CRLF before endstream */
+	fprintf(pdf, "\r\nendstream\n");	  /* EOL must be CRLF before endstream */
 	fprintf(pdf, "endobj\n");
 
 	/* Contents' stream length object - the use of this indirect object
@@ -302,14 +326,15 @@ void write_curves_pdf(double* x, double* y, int* curve_limits, int M,
 /*----------------------------------------------------------------------------*/
 /* write curves into a TXT file
 */
-void write_curves_txt(double* x, double* y, int* curve_limits, int M,
-	char* filename)
+void write_curves_txt(double *x, double *y, int *curve_limits, int M,
+					  char *filename)
 {
-	FILE* txt;
+	FILE *txt;
 	int i, k;
 
 	/* check input */
-	if (filename == NULL) error("invalid filename in write_curves_txt");
+	if (filename == NULL)
+		error("invalid filename in write_curves_txt");
 	if (M > 0 && (x == NULL || y == NULL || curve_limits == NULL))
 		error("invalid curves data in write_curves_txt");
 
@@ -318,7 +343,7 @@ void write_curves_txt(double* x, double* y, int* curve_limits, int M,
 								  otherwise, in some systems,
 								  it may behave differently */
 
-								  /* write curves */
+	/* write curves */
 	for (k = 0; k < M; k++) /* write curves */
 	{
 		for (i = curve_limits[k]; i < curve_limits[k + 1]; i++)
@@ -333,24 +358,26 @@ void write_curves_txt(double* x, double* y, int* curve_limits, int M,
 /*----------------------------------------------------------------------------*/
 /* write curves into a SVG file
 */
-void write_curves_svg(double* x, double* y, int* curve_limits, int M,
-	char* filename, int X, int Y, double width)
+void write_curves_svg(double *x, double *y, int *curve_limits, int M,
+					  char *filename, int X, int Y, double width)
 {
-	FILE* svg;
+	FILE *svg;
 	int i, k;
 
 	/* check input */
-	if (filename == NULL) error("invalid filename in write_curves_svg");
+	if (filename == NULL)
+		error("invalid filename in write_curves_svg");
 	if (M > 0 && (x == NULL || y == NULL || curve_limits == NULL))
 		error("invalid curves data in write_curves_svg");
-	if (X <= 0 || Y <= 0) error("invalid image size in write_curves_svg");
+	if (X <= 0 || Y <= 0)
+		error("invalid image size in write_curves_svg");
 
 	/* open file */
 	svg = xfopen(filename, "wb"); /* open to write as a binary file (b option).
 								  otherwise, in some systems,
 								  it may behave differently */
 
-								  /* write SVG header */
+	/* write SVG header */
 	fprintf(svg, "<?xml version=\"1.0\" standalone=\"no\"?>\n");
 	fprintf(svg, "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\"\n");
 	fprintf(svg, " \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n");
@@ -373,42 +400,62 @@ void write_curves_svg(double* x, double* y, int* curve_limits, int M,
 	xfclose(svg);
 }
 
-//从文件夹获取文件路径
-void get_filepaths_from_dir(string dir_path, vector<string>& file_paths, string file_format = "asc")
+void get_file_names_from_dir(string dir_path, vector<string> &file_names, bool is_recursive = false)
 {
-    intptr_t hFile = 0;
-    struct _finddata_t fileinfo;
-    string p;
-    if ((hFile = _findfirst(p.assign(dir_path).append("\\*").c_str(), &fileinfo)) != -1)
-    {
-        do
-        {
-            if (!(fileinfo.attrib & _A_SUBDIR))
-            {
-                string fileName = fileinfo.name;
-                string postfix = fileName.substr(fileName.find_last_of('.') + 1);
-                if (postfix == file_format)
-                    file_paths.push_back(p.assign(dir_path).append("/").append(fileinfo.name));
-            }
-        } while (_findnext(hFile, &fileinfo) == 0);
-    }
+	filesystem::path p = dir_path;
+	if (!exists(p))
+	{
+		return;
+	}
+	auto begin = filesystem::recursive_directory_iterator(p); //获取文件系统迭代器
+	auto end = filesystem::recursive_directory_iterator();	  //end迭代器
+	for (auto it = begin; it != end; it++)
+	{
 
-    _findclose(hFile);
+		auto &entry = *it;
+		if (filesystem::is_regular_file(entry))
+		{
+			file_names.push_back(path(entry));
+		}
+		else if (filesystem::is_directory(entry) && is_recursive)
+		{
+			get_file_names_from_dir(path(entry), file_names, is_recursive);
+		}
+	}
+}
+
+//（C++17）获取传入目录下（string dir_path）所有的后缀名为“asc”的文件的绝对路径，返回使用引用方式传出vector<string> &file_paths
+void get_filepaths_from_dir(string dir_path, vector<string> &file_paths, string file_format = "asc", bool is_recursive = false)
+{
+	//获取当前目录下所有文件
+	vector<string> file_names;
+
+	get_file_names_from_dir(dir_path, file_names, is_recursive);
+	vector<string> file_names_temp = vector<string>(file_names);
+	//遍历当前目录下所有文件，如果文件名称以file_format结尾，则将其路径添加到vector<string> &file_paths中
+	for (int i = 0; i < file_names_temp.size(); i++)
+	{
+		if (file_names_temp[i].substr(file_names_temp[i].size() - file_format.size(), file_format.size()) == file_format)
+		{
+			file_paths.push_back(file_names[i]);
+		}
+	}
 }
 
 //影像文件排序
-void sortFiles(vector<string>& file_paths)
+void sortFiles(vector<string> &file_paths)
 {
-    auto func = [&](string& aPath, string& bPath)->bool {
-        int aPosDot = aPath.find_last_of('.');
-        int aPosStroke = aPath.find_last_of('_');
-        string aIndexStr = aPath.substr(aPosStroke + 1, aPosDot - aPosStroke - 1);
-        int bPosDot = bPath.find_last_of('.');
-        int bPosStroke = bPath.find_last_of('_');
-        string bIndexStr = bPath.substr(bPosStroke + 1, bPosDot - bPosStroke - 1);
-        return atoi(aIndexStr.c_str()) < atoi(bIndexStr.c_str());
-    };
-    sort(file_paths.begin(), file_paths.end(), func);
+	auto func = [&](string &aPath, string &bPath) -> bool
+	{
+		int aPosDot = aPath.find_last_of('.');
+		int aPosStroke = aPath.find_last_of('_');
+		string aIndexStr = aPath.substr(aPosStroke + 1, aPosDot - aPosStroke - 1);
+		int bPosDot = bPath.find_last_of('.');
+		int bPosStroke = bPath.find_last_of('_');
+		string bIndexStr = bPath.substr(bPosStroke + 1, bPosDot - bPosStroke - 1);
+		return atoi(aIndexStr.c_str()) < atoi(bIndexStr.c_str());
+	};
+	sort(file_paths.begin(), file_paths.end(), func);
 }
 
 ////删除文件夹
@@ -463,47 +510,46 @@ void sortFiles(vector<string>& file_paths)
 //	}
 //}
 
-
 //获取影像名称
-void GetImgName(string imgPath, string& imgName)
+void GetImgName(string imgPath, string &imgName)
 {
-    int pos1 = imgPath.find_last_of("//");
-    int pos2 = imgPath.find_last_of(".");
-    imgName = imgPath.substr(pos1 + 1, pos2 - 1 - pos1);
+	int pos1 = imgPath.find_last_of("//");
+	int pos2 = imgPath.find_last_of(".");
+	imgName = imgPath.substr(pos1 + 1, pos2 - 1 - pos1);
 }
 
 //单张输出圆形标定板检测影像
-void WriteSingleDetectCircleBoardImg(string imgPath, Mat srcImg, CircleBoardPara bPara,DetectCircleBoard board)
+void WriteSingleDetectCircleBoardImg(string imgPath, Mat srcImg, CircleBoardPara bPara, DetectCircleBoard board)
 {
 	Mat img_with_pts;
 	cvtColor(srcImg, img_with_pts, CV_GRAY2BGR);
-	
+
 	int halfHeight = (bPara.nHeight - 1) / 2;
 	int halfWidth = (bPara.nWidth - 1) / 2;
 
 	vector<vector<Point>> vCntr;
 	vCntr.resize(1);
-	for (int i=0;i<board.pts.size();i++)
+	for (int i = 0; i < board.pts.size(); i++)
 	{
-		for (int j=0;j<board.pts[i].cntr.size();j++)
+		for (int j = 0; j < board.pts[i].cntr.size(); j++)
 		{
-			vCntr[0].emplace_back(Point(cvRound(board.pts[i].cntr[j].x),cvRound(board.pts[i].cntr[j].y)));
+			vCntr[0].emplace_back(Point(cvRound(board.pts[i].cntr[j].x), cvRound(board.pts[i].cntr[j].y)));
 		}
 
 		float x = board.pts[i].fitImgCoor.x;
 		float y = board.pts[i].fitImgCoor.y;
-		int row = (board.pts[i].idx.y >-99) ? halfHeight + board.pts[i].idx.y : 0;
+		int row = (board.pts[i].idx.y > -99) ? halfHeight + board.pts[i].idx.y : 0;
 		if (row - colorCnt >= 0)
 			row = row - colorCnt;
 
-		line(img_with_pts, Point(x-10, y), Point(x+10, y), ptColor[row]);
-		line(img_with_pts, Point(x, y-10), Point(x, y+10), ptColor[row]);
-		drawContours(img_with_pts,vCntr,0,ptColor[row]);
+		line(img_with_pts, Point(x - 10, y), Point(x + 10, y), ptColor[row]);
+		line(img_with_pts, Point(x, y - 10), Point(x, y + 10), ptColor[row]);
+		drawContours(img_with_pts, vCntr, 0, ptColor[row]);
 
-		if (board.pts[i].idx.y !=unused)
+		if (board.pts[i].idx.y != unused)
 		{
-			string text = to_string(board.pts[i].idx.y)+","+to_string(board.pts[i].idx.x);
-			putText(img_with_pts,text,Point(x-10,y-10),FONT_HERSHEY_PLAIN,1.2,ptColor[row]);
+			string text = to_string(board.pts[i].idx.y) + "," + to_string(board.pts[i].idx.x);
+			putText(img_with_pts, text, Point(x - 10, y - 10), FONT_HERSHEY_PLAIN, 1.2, ptColor[row]);
 		}
 
 		vCntr[0].clear();
@@ -520,10 +566,10 @@ void WriteSingleCircleBoardTxt(string txtPath, CircleBoardPara bPara, DetectCirc
 	assert(outfile.is_open());
 
 	string oneRowTxt = "";
-	oneRowTxt = "标定板个数: "+to_string(1);
-	outfile << oneRowTxt<<endl;
+	oneRowTxt = "标定板个数: " + to_string(1);
+	outfile << oneRowTxt << endl;
 
-	oneRowTxt = "行数: " + to_string(bPara.nHeight)+" 列数: "+to_string(bPara.nWidth);
+	oneRowTxt = "行数: " + to_string(bPara.nHeight) + " 列数: " + to_string(bPara.nWidth);
 	outfile << oneRowTxt << endl;
 
 	int ptCnt = board.pts.size();
@@ -533,11 +579,11 @@ void WriteSingleCircleBoardTxt(string txtPath, CircleBoardPara bPara, DetectCirc
 	oneRowTxt = "**** 行号 **** 列号 **** 影像X坐标 **** 影像Y坐标 **** 三维X坐标 **** 三维Y坐标 **** 三维Z坐标 **** 圆直径（像素）****";
 	outfile << oneRowTxt << endl;
 
-	Point2f imgpt; 
+	Point2f imgpt;
 	Point2i imgIdx;
 	Point3f objCoor;
 
-	for (int i=0;i<ptCnt;i++)
+	for (int i = 0; i < ptCnt; i++)
 	{
 		imgIdx = board.pts[i].idx;
 		imgpt = board.pts[i].fitImgCoor;
@@ -545,7 +591,7 @@ void WriteSingleCircleBoardTxt(string txtPath, CircleBoardPara bPara, DetectCirc
 		objCoor.y = (imgIdx.y <= unused) ? unused : imgIdx.y * bPara.nInterSize;
 		objCoor.z = 0.0;
 
-		oneRowTxt  = to_string(imgIdx.y) + "\t" + to_string(imgIdx.x) + "\t";
+		oneRowTxt = to_string(imgIdx.y) + "\t" + to_string(imgIdx.x) + "\t";
 		oneRowTxt += to_string(imgpt.x) + "\t";
 		oneRowTxt += to_string(imgpt.y) + "\t";
 		oneRowTxt += to_string(objCoor.x) + "\t";
@@ -572,7 +618,7 @@ void WriteSingleCircleBoardTxt(string txtPath, CircleBoardPara bPara, DetectCirc
 		oneRowTxt = to_string(cntrPtCnt);
 		outfile << oneRowTxt << endl;
 
-		for (int j=0;j<cntrPtCnt;j++)
+		for (int j = 0; j < cntrPtCnt; j++)
 		{
 			Point2f pt = board.pts[i].cntr[j];
 			oneRowTxt = to_string(pt.x) + "\t" + to_string(pt.y);
@@ -588,19 +634,22 @@ void WriteSingleCircleBoardTxt(string txtPath, CircleBoardPara bPara, DetectCirc
 	outfile.close();
 }
 
-vector<string> split(const string& str, const string& delim) {
+vector<string> split(const string &str, const string &delim)
+{
 	vector<string> res;
-	if ("" == str) return res;
+	if ("" == str)
+		return res;
 	//先将要切割的字符串从string类型转换为char*类型
-	char* strs = new char[str.length() + 1]; //不要忘了
+	char *strs = new char[str.length() + 1]; //不要忘了
 	strcpy(strs, str.c_str());
 
-	char* d = new char[delim.length() + 1];
+	char *d = new char[delim.length() + 1];
 	strcpy(d, delim.c_str());
 
-	char* p = strtok(strs, d);
-	while (p) {
-		string s = p; //分割得到的字符串转换为string类型
+	char *p = strtok(strs, d);
+	while (p)
+	{
+		string s = p;	  //分割得到的字符串转换为string类型
 		res.push_back(s); //存入结果数组
 		p = strtok(NULL, d);
 	}
@@ -608,7 +657,7 @@ vector<string> split(const string& str, const string& delim) {
 	return res;
 }
 
-void ReadSingleCircleBoardTxt(string txtPath, DetectCircleBoard& board)
+void ReadSingleCircleBoardTxt(string txtPath, DetectCircleBoard &board)
 {
 	ifstream infile;
 	infile.open(txtPath, ios::in);
@@ -622,7 +671,7 @@ void ReadSingleCircleBoardTxt(string txtPath, DetectCircleBoard& board)
 
 	getline(infile, oneRowTxt);
 	int pos = oneRowTxt.find(" ");
-	string sub = oneRowTxt.substr(pos+1, oneRowTxt.length() - pos);
+	string sub = oneRowTxt.substr(pos + 1, oneRowTxt.length() - pos);
 	int ptCnt = atoi(sub.c_str());
 
 	//oneRowTxt = "**** 行号 **** 列号 **** 影像X坐标 **** 影像Y坐标 **** 三维X坐标 **** 三维Y坐标 **** 三维Z坐标 **** 圆直径（像素）****";
@@ -639,7 +688,7 @@ void ReadSingleCircleBoardTxt(string txtPath, DetectCircleBoard& board)
 		getline(infile, oneRowTxt);
 		subs = split(oneRowTxt, "\t");
 
-		cpt.idx = Point2i(stoi(subs[1]),stoi(subs[0]));
+		cpt.idx = Point2i(stoi(subs[1]), stoi(subs[0]));
 		cpt.fitImgCoor = Point2f(stod(subs[2]), stod(subs[3]));
 		cpt.rrcEllipse = RotatedRect(cpt.fitImgCoor, Size(stod(subs[8]), stod(subs[9])), 0.0);
 		cpt.size = stod(subs[7]);
@@ -673,9 +722,9 @@ void ReadSingleCircleBoardTxt(string txtPath, DetectCircleBoard& board)
 }
 
 //输出单相机检校结果和误差
-void OutputSingleCalibResult(string filePath, CircleBoardPara bPara,SingleCalibCamera camera,CalibImageData data)
+void OutputSingleCalibResult(string filePath, CircleBoardPara bPara, SingleCalibCamera camera, CalibImageData data)
 {
-	assert(camera.errData.camCnt==1);
+	assert(camera.errData.camCnt == 1);
 
 	ofstream outfile;
 	outfile.open(filePath, ios::out);
@@ -683,7 +732,7 @@ void OutputSingleCalibResult(string filePath, CircleBoardPara bPara,SingleCalibC
 	string oneRowTxt = "";
 
 	int camCnt = camera.errData.camCnt;
-	oneRowTxt = "CamCnt: "+to_string(camCnt);
+	oneRowTxt = "CamCnt: " + to_string(camCnt);
 	outfile << oneRowTxt << endl;
 
 	InnPara para;
@@ -695,18 +744,23 @@ void OutputSingleCalibResult(string filePath, CircleBoardPara bPara,SingleCalibC
 		camera.GetCameraPara(para);
 		oneRowTxt = "Camera " + to_string(i) + " Paras:";
 		oneRowTxt += to_string(para.fx) + "\t" + to_string(para.fy) + "\t" +
-			to_string(para.cx) + "\t" + to_string(para.cy) + "\t" + to_string(para.k1) + "\t" +
-			to_string(para.k2) + "\t" + to_string(para.k3) + "\t" + to_string(para.p1) + "\t" +
-			to_string(para.p2);
+					 to_string(para.cx) + "\t" + to_string(para.cy) + "\t" + to_string(para.k1) + "\t" +
+					 to_string(para.k2) + "\t" + to_string(para.k3) + "\t" + to_string(para.p1) + "\t" +
+					 to_string(para.p2);
 		outfile << oneRowTxt << endl;
 	}
-	
+
 	oneRowTxt = "**** 行号 **** 列号 **** 影像X坐标 **** 影像Y坐标 **** 残差dX **** 残差dY **** 点位残差 **** ";
 	outfile << oneRowTxt << endl;
 
 	int imgCnt = data.objPts.size();
-	int ptCnt = 0; double imgRms = 0.0; double tmpRes = 0.0;
-	Point2f imgPt;	Point2i imgIdx;	Point3f objCoor;  Point2f ptResidual;
+	int ptCnt = 0;
+	double imgRms = 0.0;
+	double tmpRes = 0.0;
+	Point2f imgPt;
+	Point2i imgIdx;
+	Point3f objCoor;
+	Point2f ptResidual;
 	double fBoardInter = (double)bPara.nInterSize;
 	double maxDX = DBL_MIN, maxDY = DBL_MIN, maxRes = DBL_MIN;
 	double minDX = DBL_MAX, minDY = DBL_MAX, minRes = DBL_MAX;
@@ -715,21 +769,21 @@ void OutputSingleCalibResult(string filePath, CircleBoardPara bPara,SingleCalibC
 	{
 		ptCnt = data.objPts[j].size();
 		imgRms = camera.errData.imgRMS[0][j];
-		oneRowTxt = "Cam "+to_string(camCnt-1)+" Image " + to_string(j) + 
-			" PtCnt "+to_string(ptCnt)+" imgRMS "+to_string(imgRms);
+		oneRowTxt = "Cam " + to_string(camCnt - 1) + " Image " + to_string(j) +
+					" PtCnt " + to_string(ptCnt) + " imgRMS " + to_string(imgRms);
 		outfile << oneRowTxt << endl;
 		Mat imgRes = camera.errData.imgResiduals[0][j];
 		for (int k = 0; k < ptCnt; k++)
 		{
 			imgPt = data.imgPts[j][k];
 			objCoor = data.objPts[j][k];
-			imgIdx = Point2f(cvRound(objCoor.x/fBoardInter), cvRound(objCoor.y / fBoardInter));
-			ptResidual = imgRes.at<Vec2f>(0,k);
-			tmpRes = sqrt(ptResidual.x*ptResidual.x+ptResidual.y*ptResidual.y);
+			imgIdx = Point2f(cvRound(objCoor.x / fBoardInter), cvRound(objCoor.y / fBoardInter));
+			ptResidual = imgRes.at<Vec2f>(0, k);
+			tmpRes = sqrt(ptResidual.x * ptResidual.x + ptResidual.y * ptResidual.y);
 
 			oneRowTxt = to_string(imgIdx.y) + "\t" + to_string(imgIdx.x) + "\t";
 			oneRowTxt += to_string(imgPt.x) + "\t" + to_string(imgPt.y) + "\t";
-			oneRowTxt += to_string(ptResidual.x) + "\t"+to_string(ptResidual.y) + "\t";
+			oneRowTxt += to_string(ptResidual.x) + "\t" + to_string(ptResidual.y) + "\t";
 			oneRowTxt += to_string(tmpRes) + "\t";
 			outfile << oneRowTxt << endl;
 
@@ -791,9 +845,9 @@ void OutputMultiCalibResult(string filePath, MultiCalibCameras cameras, vector<C
 		cameras.GetCameraPara(i, para);
 		oneRowTxt = "Camera " + to_string(i) + " Paras:";
 		oneRowTxt += to_string(para.fx) + "\t" + to_string(para.fy) + "\t" +
-			to_string(para.cx) + "\t" + to_string(para.cy) + "\t" + to_string(para.k1) + "\t" +
-			to_string(para.k2) + "\t" + to_string(para.k3) + "\t" + to_string(para.p1) + "\t" +
-			to_string(para.p2);
+					 to_string(para.cx) + "\t" + to_string(para.cy) + "\t" + to_string(para.k1) + "\t" +
+					 to_string(para.k2) + "\t" + to_string(para.k3) + "\t" + to_string(para.p1) + "\t" +
+					 to_string(para.p2);
 		outfile << oneRowTxt << endl;
 	}
 

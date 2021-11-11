@@ -1,13 +1,12 @@
 #pragma once
+
 #include <ctype.h>
 #include <stdarg.h>
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <string.h>
-#include <io.h>
 #include <stdio.h>
-#include <direct.h>
 #include <stdlib.h>
 #include <vector>
 #include "opencv2/imgproc/types_c.h"
@@ -16,6 +15,9 @@
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/opencv.hpp"
 #include "RotationCalc.h"
+
+#include <filesystem>
+using namespace std::filesystem;
 
 using namespace std;
 using namespace cv;
@@ -30,37 +32,43 @@ const string caliBoardPtType = "cbt";
 
 Size imageSize = Size(unused, unused);
 
-//¼ìĞ£µãÀàĞÍ£¬Ê¹ÓÃimgcoor£¬fitimgcoor£¬eccentricImgCoor½øĞĞ¼ìĞ£¼ÆËã
-enum class CaliPtType 
-{ 
-	KeyPt = 1,FitPt,EccentriPt
+//ï¿½ï¿½Ğ£ï¿½ï¿½ï¿½ï¿½ï¿½Í£ï¿½Ê¹ï¿½ï¿½imgcoorï¿½ï¿½fitimgcoorï¿½ï¿½eccentricImgCoorï¿½ï¿½ï¿½Ğ¼ï¿½Ğ£ï¿½ï¿½ï¿½ï¿½
+enum class CaliPtType
+{
+	KeyPt = 1,
+	FitPt,
+	EccentriPt
 };
 
-//Ğı×ª²ÎÊıÀàĞÍ£¬Êä³öµÄĞı×ª²ÎÊıÊÇĞı×ª¾ØÕó£¬Ğı×ªÏòÁ¿£¬Å·À­½Ç»òÕßËÄÔªÊı
+//ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½Ç»ï¿½ï¿½ï¿½ï¿½ï¿½Ôªï¿½ï¿½
 enum class RotationType
 {
-	RotMatrix = 1,RotVec,Eulor, Quaternion
+	RotMatrix = 1,
+	RotVec,
+	Eulor,
+	Quaternion
 };
 
-//Ïà»úÀàĞÍ£¬Í¶Ó°Ïà»ú£¬µãÔÆÏà»ú£¬ÎÆÀíÏà»ú
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í£ï¿½Í¶Ó°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 enum class CameraType
 {
-	PROJECTOR = 1,CLOUD,TEXTURE,
+	PROJECTOR = 1,
+	CLOUD,
+	TEXTURE,
 };
 
-//»­µãµÄÑÕÉ«
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«
 const int colorCnt = 18;
 Scalar ptColor[18] = {
-Scalar(0,0,255),Scalar(0,255,0), Scalar(255,0,0), 
-Scalar(169,169,169),Scalar(0,0,139), Scalar(0,69,255), 
-Scalar(30,105,210),Scalar(10,215,255), Scalar(0,255,255), 
-Scalar(0,128,128),Scalar(144,238,144), Scalar(139,139,0), 
-Scalar(230,216,173),Scalar(130,0,75), Scalar(128,0,128), 
-Scalar(203,192,255),Scalar(147,20,255), Scalar(238,130,238)
-};
+	Scalar(0, 0, 255), Scalar(0, 255, 0), Scalar(255, 0, 0),
+	Scalar(169, 169, 169), Scalar(0, 0, 139), Scalar(0, 69, 255),
+	Scalar(30, 105, 210), Scalar(10, 215, 255), Scalar(0, 255, 255),
+	Scalar(0, 128, 128), Scalar(144, 238, 144), Scalar(139, 139, 0),
+	Scalar(230, 216, 173), Scalar(130, 0, 75), Scalar(128, 0, 128),
+	Scalar(203, 192, 255), Scalar(147, 20, 255), Scalar(238, 130, 238)};
 
-//ÅÅĞò
-bool sortPairIdX(const pair<float, int>& p1, const pair<float, int>& p2)
+//ï¿½ï¿½ï¿½ï¿½
+bool sortPairIdX(const pair<float, int> &p1, const pair<float, int> &p2)
 {
 	if (p1.first - p2.first < 0)
 		return true;
@@ -68,8 +76,8 @@ bool sortPairIdX(const pair<float, int>& p1, const pair<float, int>& p2)
 		return false;
 }
 
-//°´ÕÕ¹Ø¼üµã´óĞ¡ÅÅĞò
-bool sortKeyPointBySize(const KeyPoint& kp1, const KeyPoint& kp2)
+//ï¿½ï¿½ï¿½Õ¹Ø¼ï¿½ï¿½ï¿½ï¿½Ğ¡ï¿½ï¿½ï¿½ï¿½
+bool sortKeyPointBySize(const KeyPoint &kp1, const KeyPoint &kp2)
 {
 	if (kp1.size - kp2.size > 0)
 		return true;
@@ -77,73 +85,38 @@ bool sortKeyPointBySize(const KeyPoint& kp1, const KeyPoint& kp2)
 		return false;
 }
 
-//¼ÆËã¾àÀë
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 double calcLength(double x1, double y1, double x2, double y2)
 {
 	return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
 }
 
-//É¾³ıÎÄ¼ş¼Ğ
-void DeleteDir(const string& strDirPath)
+//É¾ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
+void DeleteDir(const string &strDirPath)
 {
-	string strPathTmp = strDirPath + "\\*.*";
-	intptr_t lFile;
-	string sAddPath;
-	struct _finddata_t sDate;
-	lFile = _findfirst(strPathTmp.c_str(), &sDate);
-	if (lFile == -1)
-	{
-		printf("read file fail!\n");
-		return;
-	}
-
-	intptr_t hFile = 0;
-	while ((hFile = _findnext(lFile, &sDate)) != -1)
-	{
-		if (sDate.attrib == _A_SUBDIR)
-		{
-			sAddPath = strDirPath;
-			sAddPath += "/";
-			sAddPath += sDate.name;
-			if (string(sDate.name) == "." || string(sDate.name) == "..")
-			{
-				continue;
-			}
-			DeleteDir(sAddPath);
-		}
-		else
-		{
-			string strFile = strDirPath + "\\" + string(sDate.name);
-			remove(strFile.c_str());
-		}
-	}
-
-	_findclose(lFile);
-	//É¾³ıÎÄ¼ş¼Ğ
-	_rmdir(strDirPath.c_str());
+	remove_all(strDirPath);
 }
 
-//Éú³ÉÖ¸¶¨ÎÄ¼ş¼Ğ
+//åˆ›å»ºç›®å½•å¦‚æœè¯¥ç›®å½•å­˜åœ¨åˆ™å…ˆåˆ é™¤åŸç›®å½•å†åˆ›å»º
 void CreateFolder(string folderPath)
 {
-	if (_access(folderPath.c_str(), 0) == -1)
-		_mkdir(folderPath.c_str());
-	else
+	if (exists(folderPath))
 	{
-		DeleteDir(folderPath);
-		_mkdir(folderPath.c_str());
+		remove_all(folderPath);
 	}
+	create_directory(folderPath);
 }
 
 //1	0	0
 //0	cos(angle) sin(angle)
 //0	-sin(angle) cos(angle)
-void RotationX(double angle, Mat& mR)
+void RotationX(double angle, Mat &mR)
 {
 	mR = Mat::zeros(3, 3, CV_64FC1);
 	double R[9];
 	memcpy(R, mR.data, 9 * sizeof(double));
-	R[0] = 1.0; R[8] = R[4] = cos(angle);
+	R[0] = 1.0;
+	R[8] = R[4] = cos(angle);
 	R[5] = sin(angle);
 	R[7] = -R[5];
 	memcpy(mR.data, R, 9 * sizeof(double));
@@ -152,7 +125,7 @@ void RotationX(double angle, Mat& mR)
 //cos(angle)	0	-sin(angle)
 //0	1	0
 //sin(angle)	0	cos(angle)
-void RotationY(double angle, Mat& mR)
+void RotationY(double angle, Mat &mR)
 {
 	mR = Mat::zeros(3, 3, CV_64FC1);
 	double R[9];
@@ -167,7 +140,7 @@ void RotationY(double angle, Mat& mR)
 //cos(angle)	sin(angle)	0
 //-sin(angle)	cos(angle)	0
 //0	0	1
-void RotationZ(double angle, Mat& mR)
+void RotationZ(double angle, Mat &mR)
 {
 	mR = Mat::zeros(3, 3, CV_64FC1);
 	double R[9];
@@ -179,174 +152,233 @@ void RotationZ(double angle, Mat& mR)
 	memcpy(mR.data, R, 9 * sizeof(double));
 }
 
-void Matrix2Eulor(double* R, int rotateOrder, double& eulor1, double& eulor2, double& eulor3)
+void Matrix2Eulor(double *R, int rotateOrder, double &eulor1, double &eulor2, double &eulor3)
 {
 	switch (rotateOrder)
 	{
-		//µÚÒ»Àà£ºµÚÒ»´ÎºÍµÚÈı´Î×ª¶¯ÈÆÏàÍ¬Öá
+		//ï¿½ï¿½Ò»ï¿½à£ºï¿½ï¿½Ò»ï¿½ÎºÍµï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¬ï¿½ï¿½
 	case 121:
 	{
-		eulor2 = acos(R[0]); double temp = sin(eulor2);
-		eulor1 = atan2(R[1] * temp, -R[2] * temp); eulor3 = atan2(R[3] * temp, R[6] * temp);
+		eulor2 = acos(R[0]);
+		double temp = sin(eulor2);
+		eulor1 = atan2(R[1] * temp, -R[2] * temp);
+		eulor3 = atan2(R[3] * temp, R[6] * temp);
 		break;
 	}
 	case 131:
 	{
-		eulor2 = acos(R[0]); double temp = sin(eulor2);
-		eulor1 = atan2(R[2] * temp, -R[1] * temp); eulor3 = atan2(R[6] * temp, R[3] * temp);
+		eulor2 = acos(R[0]);
+		double temp = sin(eulor2);
+		eulor1 = atan2(R[2] * temp, -R[1] * temp);
+		eulor3 = atan2(R[6] * temp, R[3] * temp);
 		break;
 	}
 	case 212:
 	{
-		eulor2 = acos(R[4]); double temp = sin(eulor2);
-		eulor1 = atan2(R[3] * temp, -R[5] * temp); eulor3 = atan2(R[1] * temp, R[7] * temp);
+		eulor2 = acos(R[4]);
+		double temp = sin(eulor2);
+		eulor1 = atan2(R[3] * temp, -R[5] * temp);
+		eulor3 = atan2(R[1] * temp, R[7] * temp);
 		break;
 	}
 	case 232:
 	{
-		eulor2 = acos(R[4]); double temp = sin(eulor2);
-		eulor1 = atan2(R[5] * temp, -R[3] * temp); eulor3 = atan2(R[7] * temp, R[1] * temp);
+		eulor2 = acos(R[4]);
+		double temp = sin(eulor2);
+		eulor1 = atan2(R[5] * temp, -R[3] * temp);
+		eulor3 = atan2(R[7] * temp, R[1] * temp);
 		break;
 	}
 	case 313:
 	{
-		eulor2 = acos(R[8]); double temp = sin(eulor2);
-		eulor1 = atan2(R[6] * temp, -R[7] * temp); eulor3 = atan2(R[2] * temp, R[5] * temp);
+		eulor2 = acos(R[8]);
+		double temp = sin(eulor2);
+		eulor1 = atan2(R[6] * temp, -R[7] * temp);
+		eulor3 = atan2(R[2] * temp, R[5] * temp);
 		break;
 	}
 	case 323:
 	{
-		eulor2 = acos(R[8]); double temp = sin(eulor2);
-		eulor1 = atan2(R[7] * temp, -R[6] * temp); eulor3 = atan2(R[5] * temp, R[2] * temp);
+		eulor2 = acos(R[8]);
+		double temp = sin(eulor2);
+		eulor1 = atan2(R[7] * temp, -R[6] * temp);
+		eulor3 = atan2(R[5] * temp, R[2] * temp);
 		break;
 	}
-	//µÚ¶şÀà£ºÃ¿´Î×ª¶¯ÈÆ²»Í¬Öá
+	//ï¿½Ú¶ï¿½ï¿½à£ºÃ¿ï¿½ï¿½×ªï¿½ï¿½ï¿½Æ²ï¿½Í¬ï¿½ï¿½
 	case 123:
 	{
-		eulor2 = asin(R[6]); double temp = cos(eulor2);
-		eulor1 = atan2(-R[7] * temp, R[8] * temp); eulor3 = atan2(-R[3] * temp, R[0] * temp);
+		eulor2 = asin(R[6]);
+		double temp = cos(eulor2);
+		eulor1 = atan2(-R[7] * temp, R[8] * temp);
+		eulor3 = atan2(-R[3] * temp, R[0] * temp);
 		break;
 	}
 	case 132:
 	{
-		eulor2 = asin(-R[3]); double temp = cos(eulor2);
-		eulor1 = atan2(R[5] * temp, R[4] * temp); eulor3 = atan2(R[6] * temp, R[0] * temp);
+		eulor2 = asin(-R[3]);
+		double temp = cos(eulor2);
+		eulor1 = atan2(R[5] * temp, R[4] * temp);
+		eulor3 = atan2(R[6] * temp, R[0] * temp);
 		break;
 	}
 	case 213:
 	{
-		eulor2 = asin(-R[7]); double temp = cos(eulor2);
-		eulor1 = atan2(R[6] * temp, R[8] * temp); eulor3 = atan2(R[1] * temp, R[4] * temp);
+		eulor2 = asin(-R[7]);
+		double temp = cos(eulor2);
+		eulor1 = atan2(R[6] * temp, R[8] * temp);
+		eulor3 = atan2(R[1] * temp, R[4] * temp);
 		break;
 	}
 	case 231:
 	{
-		eulor2 = asin(R[1]); double temp = cos(eulor2);
-		eulor1 = atan2(-R[2] * temp, R[0] * temp); eulor3 = atan2(-R[7] * temp, R[4] * temp);
+		eulor2 = asin(R[1]);
+		double temp = cos(eulor2);
+		eulor1 = atan2(-R[2] * temp, R[0] * temp);
+		eulor3 = atan2(-R[7] * temp, R[4] * temp);
 		break;
-
 	}
 	case 312:
 	{
-		eulor2 = asin(R[5]); double temp = cos(eulor2);
-		eulor1 = atan2(-R[3] * temp, R[4] * temp); eulor3 = atan2(R[2] * temp, R[8] * temp);
+		eulor2 = asin(R[5]);
+		double temp = cos(eulor2);
+		eulor1 = atan2(-R[3] * temp, R[4] * temp);
+		eulor3 = atan2(R[2] * temp, R[8] * temp);
 		break;
 	}
 	case 321:
 	{
-		eulor2 = asin(-R[2]); double temp = cos(eulor2);
-		eulor1 = atan2(R[1] * temp, R[0] * temp); eulor3 = atan2(R[5] * temp, R[8] * temp);
+		eulor2 = asin(-R[2]);
+		double temp = cos(eulor2);
+		eulor1 = atan2(R[1] * temp, R[0] * temp);
+		eulor3 = atan2(R[5] * temp, R[8] * temp);
 		break;
 	}
 	}
 }
 
-void Eulor2Matrix(double eulor1, double eulor2, double eulor3, int rotateOrder, double* R)
+void Eulor2Matrix(double eulor1, double eulor2, double eulor3, int rotateOrder, double *R)
 {
 	Mat mR1, mR2, mR3, mRTemp, mR;
 	switch (rotateOrder)
 	{
 	case 121:
 	{
-		RotationX(eulor1, mR1); RotationY(eulor2, mR2); RotationX(eulor3, mR3);
-		mRTemp = mR2 * mR1;		mR = mR3 * mRTemp;
+		RotationX(eulor1, mR1);
+		RotationY(eulor2, mR2);
+		RotationX(eulor3, mR3);
+		mRTemp = mR2 * mR1;
+		mR = mR3 * mRTemp;
 		memcpy(R, mR.data, 9 * sizeof(double));
 		break;
 	}
 	case 131:
 	{
-		RotationX(eulor1, mR1); RotationZ(eulor2, mR2); RotationX(eulor3, mR3);
-		mRTemp = mR2 * mR1;		mR = mR3 * mRTemp;
+		RotationX(eulor1, mR1);
+		RotationZ(eulor2, mR2);
+		RotationX(eulor3, mR3);
+		mRTemp = mR2 * mR1;
+		mR = mR3 * mRTemp;
 		memcpy(R, mR.data, 9 * sizeof(double));
 		break;
 	}
 	case 212:
 	{
-		RotationY(eulor1, mR1); RotationX(eulor2, mR2); RotationY(eulor3, mR3);
-		mRTemp = mR2 * mR1;		mR = mR3 * mRTemp;
+		RotationY(eulor1, mR1);
+		RotationX(eulor2, mR2);
+		RotationY(eulor3, mR3);
+		mRTemp = mR2 * mR1;
+		mR = mR3 * mRTemp;
 		memcpy(R, mR.data, 9 * sizeof(double));
 		break;
 	}
 	case 232:
 	{
-		RotationY(eulor1, mR1); RotationZ(eulor2, mR2); RotationY(eulor3, mR3);
-		mRTemp = mR2 * mR1;		mR = mR3 * mRTemp;
+		RotationY(eulor1, mR1);
+		RotationZ(eulor2, mR2);
+		RotationY(eulor3, mR3);
+		mRTemp = mR2 * mR1;
+		mR = mR3 * mRTemp;
 		memcpy(R, mR.data, 9 * sizeof(double));
 		break;
 	}
 	case 313:
 	{
-		RotationZ(eulor1, mR1); RotationX(eulor2, mR2); RotationZ(eulor3, mR3);
-		mRTemp = mR2 * mR1;		mR = mR3 * mRTemp;
+		RotationZ(eulor1, mR1);
+		RotationX(eulor2, mR2);
+		RotationZ(eulor3, mR3);
+		mRTemp = mR2 * mR1;
+		mR = mR3 * mRTemp;
 		memcpy(R, mR.data, 9 * sizeof(double));
 		break;
 	}
 	case 323:
 	{
-		RotationZ(eulor1, mR1); RotationY(eulor2, mR2); RotationZ(eulor3, mR3);
-		mRTemp = mR2 * mR1;		mR = mR3 * mRTemp;
+		RotationZ(eulor1, mR1);
+		RotationY(eulor2, mR2);
+		RotationZ(eulor3, mR3);
+		mRTemp = mR2 * mR1;
+		mR = mR3 * mRTemp;
 		memcpy(R, mR.data, 9 * sizeof(double));
 		break;
 	}
 	case 123:
 	{
-		RotationX(eulor1, mR1); RotationY(eulor2, mR2); RotationZ(eulor3, mR3);
-		mRTemp = mR2 * mR1;		mR = mR3 * mRTemp;
+		RotationX(eulor1, mR1);
+		RotationY(eulor2, mR2);
+		RotationZ(eulor3, mR3);
+		mRTemp = mR2 * mR1;
+		mR = mR3 * mRTemp;
 		memcpy(R, mR.data, 9 * sizeof(double));
 		break;
 	}
 	case 132:
 	{
-		RotationX(eulor1, mR1); RotationZ(eulor2, mR2); RotationY(eulor3, mR3);
-		mRTemp = mR2 * mR1;		mR = mR3 * mRTemp;
+		RotationX(eulor1, mR1);
+		RotationZ(eulor2, mR2);
+		RotationY(eulor3, mR3);
+		mRTemp = mR2 * mR1;
+		mR = mR3 * mRTemp;
 		memcpy(R, mR.data, 9 * sizeof(double));
 		break;
 	}
 	case 213:
 	{
-		RotationY(eulor1, mR1); RotationX(eulor2, mR2); RotationZ(eulor3, mR3);
-		mRTemp = mR2 * mR1;		mR = mR3 * mRTemp;
+		RotationY(eulor1, mR1);
+		RotationX(eulor2, mR2);
+		RotationZ(eulor3, mR3);
+		mRTemp = mR2 * mR1;
+		mR = mR3 * mRTemp;
 		memcpy(R, mR.data, 9 * sizeof(double));
 		break;
 	}
 	case 231:
 	{
-		RotationY(eulor1, mR1); RotationZ(eulor2, mR2); RotationX(eulor3, mR3);
-		mRTemp = mR2 * mR1;		mR = mR3 * mRTemp;
+		RotationY(eulor1, mR1);
+		RotationZ(eulor2, mR2);
+		RotationX(eulor3, mR3);
+		mRTemp = mR2 * mR1;
+		mR = mR3 * mRTemp;
 		memcpy(R, mR.data, 9 * sizeof(double));
 		break;
 	}
 	case 312:
 	{
-		RotationZ(eulor1, mR1); RotationX(eulor2, mR2); RotationY(eulor3, mR3);
-		mRTemp = mR2 * mR1;		mR = mR3 * mRTemp;
+		RotationZ(eulor1, mR1);
+		RotationX(eulor2, mR2);
+		RotationY(eulor3, mR3);
+		mRTemp = mR2 * mR1;
+		mR = mR3 * mRTemp;
 		memcpy(R, mR.data, 9 * sizeof(double));
 		break;
 	}
 	case 321:
 	{
-		RotationZ(eulor1, mR1); RotationY(eulor2, mR2); RotationX(eulor3, mR3);
-		mRTemp = mR2 * mR1;		mR = mR3 * mRTemp;
+		RotationZ(eulor1, mR1);
+		RotationY(eulor2, mR2);
+		RotationX(eulor3, mR3);
+		mRTemp = mR2 * mR1;
+		mR = mR3 * mRTemp;
 		memcpy(R, mR.data, 9 * sizeof(double));
 		break;
 	}
@@ -358,27 +390,27 @@ void Eulor2Matrix(double eulor1, double eulor2, double eulor3, int rotateOrder, 
 	}
 }
 
-//Ô²µã±ê¶¨°å²ÎÊı
+//Ô²ï¿½ï¿½ê¶¨ï¿½ï¿½ï¿½ï¿½ï¿½
 struct CircleBoardPara
 {
-	int nBoardW, nBoardH;//±ê¶¨°å³ß´ç£¬×Ü¿í¶È£¨mm£©ºÍ×Ü¸ß¶È£¨mm£©
-	int nInterSize, nWidth, nHeight;//µã¼ä¸ô£¨mm£©£¬×ÜÁĞÊı£¬×ÜĞĞÊı
-	int nBigCircle;//´óÔ²¸öÊı
-	int nBigD, nSmallD;//´óÔ²Ö±¾¶£¨mm£©£¬Ğ¡Ô²Ö±¾¶£¨mm£©
-	float fRes=unused;//Í¶Ó°·Ö±æÂÊ£¨mm£©Èç0.005£¬¼´ÖØ²ÉÑùÊ±1¸öÏñËØµÄ´óĞ¡
+	int nBoardW, nBoardH;			 //ï¿½ê¶¨ï¿½ï¿½ß´ç£¬ï¿½Ü¿ï¿½ï¿½È£ï¿½mmï¿½ï¿½ï¿½ï¿½ï¿½Ü¸ß¶È£ï¿½mmï¿½ï¿½
+	int nInterSize, nWidth, nHeight; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½mmï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	int nBigCircle;					 //ï¿½ï¿½Ô²ï¿½ï¿½ï¿½ï¿½
+	int nBigD, nSmallD;				 //ï¿½ï¿½Ô²Ö±ï¿½ï¿½ï¿½ï¿½mmï¿½ï¿½ï¿½ï¿½Ğ¡Ô²Ö±ï¿½ï¿½ï¿½ï¿½mmï¿½ï¿½
+	float fRes = unused;			 //Í¶Ó°ï¿½Ö±ï¿½ï¿½Ê£ï¿½mmï¿½ï¿½ï¿½ï¿½0.005ï¿½ï¿½ï¿½ï¿½ï¿½Ø²ï¿½ï¿½ï¿½Ê±1ï¿½ï¿½ï¿½ï¿½ï¿½ØµÄ´ï¿½Ğ¡
 };
 
-//Ô²ĞÎ±ê¶¨µã½á¹¹
+//Ô²ï¿½Î±ê¶¨ï¿½ï¿½á¹¹
 struct CirclePoint
 {
-	int id=unused;
-	Point2i idx = Point(unused, unused);//ĞĞÁĞºÅ£¬ÁĞÔÚÇ°£¬ĞĞÔÚºó£¬ÁĞÏòÓÒÎªÕı£¬ĞĞÏòÏÂÎªÕı
-	Point2f imgCoor=Point2f(unused, unused);//keypointÖĞ×ø±ê
-	Point2f fitImgCoor = Point2f(unused, unused);//subpixÄâºÏÍÖÔ²ÖĞĞÄ×ø±ê
-	Point2f eccentricImgCoor = Point2f(unused, unused);//Æ«ĞÄ¸ÄÕıºóµÄ×ø±ê
-	vector<Point2f> cntr;//subpixÔ²ĞÎ±ßÔµµã
-	RotatedRect rrcEllipse;//ÍÖÔ²Íâ°üÎ§¾ØĞÎ
-	float size = unused;//keypointÖĞ³ß´ç
+	int id = unused;
+	Point2i idx = Point(unused, unused);				//ï¿½ï¿½ï¿½ĞºÅ£ï¿½ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½Úºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½
+	Point2f imgCoor = Point2f(unused, unused);			//keypointï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	Point2f fitImgCoor = Point2f(unused, unused);		//subpixï¿½ï¿½ï¿½ï¿½ï¿½Ô²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	Point2f eccentricImgCoor = Point2f(unused, unused); //Æ«ï¿½Ä¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	vector<Point2f> cntr;								//subpixÔ²ï¿½Î±ï¿½Ôµï¿½ï¿½
+	RotatedRect rrcEllipse;								//ï¿½ï¿½Ô²ï¿½ï¿½ï¿½Î§ï¿½ï¿½ï¿½ï¿½
+	float size = unused;								//keypointï¿½Ğ³ß´ï¿½
 
 	void CalcId(CircleBoardPara para)
 	{
@@ -390,8 +422,8 @@ struct CirclePoint
 	}
 };
 
-//°´ÕÕIDÅÅĞò
-bool sortCirclePointByID(const CirclePoint& cp1, const CirclePoint& cp2)
+//ï¿½ï¿½ï¿½ï¿½IDï¿½ï¿½ï¿½ï¿½
+bool sortCirclePointByID(const CirclePoint &cp1, const CirclePoint &cp2)
 {
 	if (cp1.id - cp2.id < 0)
 		return true;
@@ -399,8 +431,8 @@ bool sortCirclePointByID(const CirclePoint& cp1, const CirclePoint& cp2)
 		return false;
 }
 
-//°´ÕÕ±ê¶¨°åĞĞÁĞºÅÅÅĞò
-bool sortCirclePointByIdxRowCol(const CirclePoint& cp1, const CirclePoint& cp2)
+//ï¿½ï¿½ï¿½Õ±ê¶¨ï¿½ï¿½ï¿½ï¿½ï¿½Ğºï¿½ï¿½ï¿½ï¿½ï¿½
+bool sortCirclePointByIdxRowCol(const CirclePoint &cp1, const CirclePoint &cp2)
 {
 	if (cp1.idx.y - cp2.idx.y < 0)
 		return true;
@@ -410,8 +442,8 @@ bool sortCirclePointByIdxRowCol(const CirclePoint& cp1, const CirclePoint& cp2)
 		return false;
 }
 
-//°´ÕÕ±ê¶¨°åÓ°Ïñ×ø±êÅÅĞò
-bool sortCirclePointByImgX(const CirclePoint& cp1, const CirclePoint& cp2)
+//ï¿½ï¿½ï¿½Õ±ê¶¨ï¿½ï¿½Ó°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+bool sortCirclePointByImgX(const CirclePoint &cp1, const CirclePoint &cp2)
 {
 	if (cp1.imgCoor.x - cp2.imgCoor.x < 0)
 		return true;
@@ -419,8 +451,8 @@ bool sortCirclePointByImgX(const CirclePoint& cp1, const CirclePoint& cp2)
 		return false;
 }
 
-//°´ÕÕ±ê¶¨°åÓ°Ïñ×ø±êÅÅĞò
-bool sortCirclePointByImgY(const CirclePoint& cp1, const CirclePoint& cp2)
+//ï¿½ï¿½ï¿½Õ±ê¶¨ï¿½ï¿½Ó°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+bool sortCirclePointByImgY(const CirclePoint &cp1, const CirclePoint &cp2)
 {
 	if (cp1.imgCoor.y - cp2.imgCoor.y < 0)
 		return true;
@@ -428,23 +460,23 @@ bool sortCirclePointByImgY(const CirclePoint& cp1, const CirclePoint& cp2)
 		return false;
 }
 
-//Ö±Ïß²ÎÊı£¬Ò»°ãĞÎÊ½AX+BY+CZ=0
-//µãĞ±Ê½y-pty=k(x-ptx)
+//Ö±ï¿½ß²ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Ê½AX+BY+CZ=0
+//ï¿½ï¿½Ğ±Ê½y-pty=k(x-ptx)
 struct LinePara
 {
 	double k, ptX, ptY;
 	double A, B, C;
 };
 
-//ÌáÈ¡µÄÔ²µã±ê¶¨°å½á¹¹
+//ï¿½ï¿½È¡ï¿½ï¿½Ô²ï¿½ï¿½ê¶¨ï¿½ï¿½á¹¹
 struct DetectCircleBoard
 {
-	vector<CirclePoint> pts;//ËùÓĞµã
+	vector<CirclePoint> pts; //ï¿½ï¿½ï¿½Ğµï¿½
 
-	CirclePoint A, B, C, D, E;//´óÔ²
-	CirclePoint origin;//Ô²µã
+	CirclePoint A, B, C, D, E; //ï¿½ï¿½Ô²
+	CirclePoint origin;		   //Ô²ï¿½ï¿½
 
-	string boardId = "";//ÓÃÓ°ÏñÃû³Æ×÷ÎªÌáÈ¡±ê¶¨°åµÄID
+	string boardId = ""; //ï¿½ï¿½Ó°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½È¡ï¿½ê¶¨ï¿½ï¿½ï¿½ID
 
 	void ClearData()
 	{
@@ -464,7 +496,7 @@ struct DetectCircleBoard
 		origin.idx = Point2i(unused, unused);
 	}
 
-	void FillCircleInfoFrmPts(CirclePoint& pt)
+	void FillCircleInfoFrmPts(CirclePoint &pt)
 	{
 		for (int i = 0; i < pts.size(); i++)
 		{
@@ -488,7 +520,7 @@ struct DetectCircleBoard
 		}
 	}
 
-	void TransBoardPt(const Mat& trans)
+	void TransBoardPt(const Mat &trans)
 	{
 		int ptCnt = (int)pts.size();
 		Mat a, b, c, y1, y2, y3;
@@ -497,7 +529,7 @@ struct DetectCircleBoard
 			//Point2f img = pts[i].imgCoor;
 			Point2f fit = pts[i].fitImgCoor;
 			//Point2f eccentric = pts[i].eccentricImgCoor;
-			
+
 			//a = (Mat_<double>(3, 1) << img.x, img.y, 1);
 			b = (Mat_<double>(3, 1) << fit.x, fit.y, 1);
 			//c = (Mat_<double>(3, 1) << eccentric.x, eccentric.y, 1);
@@ -506,11 +538,11 @@ struct DetectCircleBoard
 			//y3 = trans * c;
 
 			//pts[i].imgCoor = Point2f(y1.at<double>(0, 0) / y1.at<double>(2, 0), y1.at<double>(1, 0) / y1.at<double>(2, 0));
-			pts[i].fitImgCoor = Point2f(y2.at<double>(0, 0) / y2.at<double>(2, 0), y2.at<double>(1, 0) / y2.at<double>(2, 0));			
+			pts[i].fitImgCoor = Point2f(y2.at<double>(0, 0) / y2.at<double>(2, 0), y2.at<double>(1, 0) / y2.at<double>(2, 0));
 			//pts[i].eccentricImgCoor = Point2f(y3.at<double>(0, 0) / y3.at<double>(2, 0), y3.at<double>(1, 0) / y3.at<double>(2, 0));
 
 			int cntr = (int)pts[i].cntr.size();
-			for (int j=0;j<cntr;j++)
+			for (int j = 0; j < cntr; j++)
 			{
 				Point2f img = pts[i].cntr[j];
 				a = (Mat_<double>(3, 1) << img.x, img.y, 1);
@@ -528,15 +560,15 @@ struct DetectCircleBoard
 	}
 };
 
-//¼ìĞ£Ó°ÏñÊı¾İ½á¹¹£¬µ¥Ö¡»òÕß¶àÖ¡
+//ï¿½ï¿½Ğ£Ó°ï¿½ï¿½ï¿½ï¿½ï¿½İ½á¹¹ï¿½ï¿½ï¿½ï¿½Ö¡ï¿½ï¿½ï¿½ß¶ï¿½Ö¡
 struct CalibImageData
 {
-	vector<vector<Point2f>> imgPts;//µ¥Ïà»ú¶àÓ°Ïñ
-	vector<vector<Point3f>> objPts;//¶àÓ°Ïñ
+	vector<vector<Point2f>> imgPts; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó°ï¿½ï¿½
+	vector<vector<Point3f>> objPts; //ï¿½ï¿½Ó°ï¿½ï¿½
 
-	CaliPtType ptType;//¼ìĞ£µãÀàĞÍ£¬ÈıÖÖ
+	CaliPtType ptType; //ï¿½ï¿½Ğ£ï¿½ï¿½ï¿½ï¿½ï¿½Í£ï¿½ï¿½ï¿½ï¿½ï¿½
 
-	//Çå¿ÕÊı¾İ
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	void ClearData()
 	{
 		if (imgPts.size() > 0)
@@ -558,15 +590,16 @@ struct CalibImageData
 		}
 	}
 
-	void TransSingleBoard2CaliImage(CircleBoardPara bPara, DetectCircleBoard dBoard,CaliPtType type)
+	void TransSingleBoard2CaliImage(CircleBoardPara bPara, DetectCircleBoard dBoard, CaliPtType type)
 	{
 		ptType = type;
-		
+
 		int ptCnt = dBoard.pts.size();
 		double ratio = bPara.nInterSize;
 
 		this->ClearData();
-		vector<Point2f> img; vector<Point3f> obj;
+		vector<Point2f> img;
+		vector<Point3f> obj;
 		for (int i = 0; i < ptCnt; i++)
 		{
 			Point2i idx = dBoard.pts[i].idx;
@@ -574,11 +607,11 @@ struct CalibImageData
 				continue;
 			Point3f ptCoor = Point3f((double)(idx.x) * ratio, (double)(idx.y) * ratio, 0.0);
 
-			if(ptType== CaliPtType::KeyPt)
+			if (ptType == CaliPtType::KeyPt)
 				img.emplace_back(dBoard.pts[i].imgCoor);
-			else if(ptType == CaliPtType::FitPt)
+			else if (ptType == CaliPtType::FitPt)
 				img.emplace_back(dBoard.pts[i].fitImgCoor);
-			else if(ptType == CaliPtType::EccentriPt)
+			else if (ptType == CaliPtType::EccentriPt)
 				img.emplace_back(dBoard.pts[i].eccentricImgCoor);
 
 			obj.emplace_back(ptCoor);
@@ -587,10 +620,10 @@ struct CalibImageData
 		this->objPts.emplace_back(obj);
 	}
 
-	void TransAllBoard2CaliImage(CircleBoardPara bPara, int camNo,vector<vector<DetectCircleBoard>> vBoard, CaliPtType type)
+	void TransAllBoard2CaliImage(CircleBoardPara bPara, int camNo, vector<vector<DetectCircleBoard>> vBoard, CaliPtType type)
 	{
 		int camCnt = vBoard.size();
-		assert(camNo-camCnt<0 && camNo>=0);
+		assert(camNo - camCnt < 0 && camNo >= 0);
 
 		ptType = type;
 		int imgCnt = vBoard[camNo].size();
@@ -602,7 +635,8 @@ struct CalibImageData
 			if (ptCnt == 0)
 				break;
 
-			vector<Point2f> img; vector<Point3f> obj;
+			vector<Point2f> img;
+			vector<Point3f> obj;
 			for (int i = 0; i < ptCnt; i++)
 			{
 				Point2i idx = vBoard[camNo][n].pts[i].idx;
@@ -627,14 +661,14 @@ struct CalibImageData
 	}
 };
 
-//Á¢Ìå¼ìĞ£Êı¾İ½á¹¹£¬×óÏà»ú×ÜÊÇ0ºÅÏà»ú
+//ï¿½ï¿½ï¿½ï¿½ï¿½Ğ£ï¿½ï¿½ï¿½İ½á¹¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½0ï¿½ï¿½ï¿½ï¿½ï¿½
 struct StereoCalibImageData
 {
-	vector<vector<Point2f>> imgLPts,imgRPts;//×óÏà»ú¶àÓ°Ïñ£¬ÓÒÏà»ú¶àÓ°Ïñ
-	vector<vector<Point3f>> objPts;//¶àÓ°Ïñ
-	CaliPtType ptType;//¼ìĞ£µãÀàĞÍ£¬ÈıÖÖ
+	vector<vector<Point2f>> imgLPts, imgRPts; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó°ï¿½ï¿½
+	vector<vector<Point3f>> objPts;			  //ï¿½ï¿½Ó°ï¿½ï¿½
+	CaliPtType ptType;						  //ï¿½ï¿½Ğ£ï¿½ï¿½ï¿½ï¿½ï¿½Í£ï¿½ï¿½ï¿½ï¿½ï¿½
 
-	//Çå¿ÕÊı¾İ
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	void ClearData()
 	{
 		if (imgLPts.size() > 0)
@@ -671,21 +705,23 @@ struct StereoCalibImageData
 		double ratio = bPara.nInterSize;
 
 		this->ClearData();
-		
+
 		int imgLCnt = boardL.size();
 		int imgRCnt = boardR.size();
-		
+
 		string idL = "", idR = "";
 		int ptLCnt = 0, ptRCnt = 0;
-		int ptLId =0,ptRId =0, lastPos = 0;
+		int ptLId = 0, ptRId = 0, lastPos = 0;
 		vector<Point2f> imgL, imgR;
 		vector<Point3f> obj;
-		Point2i idx; Point3f ptCoor;
-		for (int i = 0; i <imgLCnt ; i++)
+		Point2i idx;
+		Point3f ptCoor;
+		for (int i = 0; i < imgLCnt; i++)
 		{
 			idL = boardL[i].boardId;
 
-			vector<Point2f>().swap(imgL); vector<Point2f>().swap(imgR);
+			vector<Point2f>().swap(imgL);
+			vector<Point2f>().swap(imgR);
 			vector<Point3f>().swap(obj);
 			for (int j = 0; j < imgRCnt; j++)
 			{
@@ -730,7 +766,7 @@ struct StereoCalibImageData
 						}
 					}
 
-					if (imgL.size() > 0 && imgR.size()>0&& obj.size()>0)
+					if (imgL.size() > 0 && imgR.size() > 0 && obj.size() > 0)
 					{
 						imgLPts.push_back(imgL);
 						imgRPts.push_back(imgR);
@@ -743,7 +779,7 @@ struct StereoCalibImageData
 	}
 };
 
-//·´Í¶Ó°Êı¾İ,Íê³ÉÊı¾İ×ª»»£¬·´Í¶Ó°±ä»»ºÍÍ¶Ó°±ä»»
+//ï¿½ï¿½Í¶Ó°ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¶Ó°ï¿½ä»»ï¿½ï¿½Í¶Ó°ï¿½ä»»
 struct unProjectTransData
 {
 	vector<Point2f> srcImgPt, unprojImgPt;
@@ -762,21 +798,21 @@ struct unProjectTransData
 		}
 	}
 
-	void TransBoard2UnprojData(CircleBoardPara& bPara,Size srcImgSize, DetectCircleBoard dBoard)
+	void TransBoard2UnprojData(CircleBoardPara &bPara, Size srcImgSize, DetectCircleBoard dBoard)
 	{
-		int xAdd = (bPara.nWidth- 1) / 2;
-		int yAdd = (bPara.nHeight- 1) / 2;
+		int xAdd = (bPara.nWidth - 1) / 2;
+		int yAdd = (bPara.nHeight - 1) / 2;
 		int ptCnt = dBoard.pts.size();
 		//bPara.fRes = (float)cvFloor((((float)bPara.nInterSize*(maxX - minX-1)) /(float)srcImgSize.width)*100)/100.0;
 		float ratio = bPara.nInterSize / bPara.fRes;
-		float zeroAdd =  bPara.nBigD / bPara.fRes;
+		float zeroAdd = bPara.nBigD / bPara.fRes;
 
 		double minX = DBL_MAX, minY = DBL_MAX;
 		double maxX = DBL_MIN, maxY = DBL_MIN;
 		for (int i = 0; i < ptCnt; i++)
 		{
 			Point2i idx = dBoard.pts[i].idx;
-			Point2f dstImgPt = Point2f((double)(idx.x + xAdd) * ratio+ zeroAdd, (double)(idx.y + yAdd) * ratio+ zeroAdd);
+			Point2f dstImgPt = Point2f((double)(idx.x + xAdd) * ratio + zeroAdd, (double)(idx.y + yAdd) * ratio + zeroAdd);
 			if (dstImgPt.x - minX < 0)
 				minX = dstImgPt.x;
 			if (dstImgPt.y - minY < 0)
@@ -788,14 +824,15 @@ struct unProjectTransData
 				maxY = dstImgPt.y;
 		}
 
-		double subX = 0;// minX - 1.0;
-		double subY = 0;// minY - 1.0;
+		double subX = 0; // minX - 1.0;
+		double subY = 0; // minY - 1.0;
 
-		this->srcImgPt.clear(); this->unprojImgPt.clear();
+		this->srcImgPt.clear();
+		this->unprojImgPt.clear();
 		for (int i = 0; i < ptCnt; i++)
 		{
 			Point2i idx = dBoard.pts[i].idx;
-			Point2f dstImgPt = Point2f((double)(idx.x + xAdd) * ratio + zeroAdd-subX, (double)(idx.y + yAdd) * ratio + zeroAdd-subY);
+			Point2f dstImgPt = Point2f((double)(idx.x + xAdd) * ratio + zeroAdd - subX, (double)(idx.y + yAdd) * ratio + zeroAdd - subY);
 			this->srcImgPt.emplace_back(dBoard.pts[i].fitImgCoor);
 			this->unprojImgPt.emplace_back(dstImgPt);
 
@@ -812,20 +849,20 @@ struct unProjectTransData
 		unprojImgSize = Size(cvCeil(maxX + zeroAdd), cvCeil(maxY + zeroAdd));
 	}
 
-	void DoSingleImgUnproj(const Mat& srcImg, Mat& unprjImg)
+	void DoSingleImgUnproj(const Mat &srcImg, Mat &unprjImg)
 	{
 		Mat unprojTrans = findHomography(this->srcImgPt, this->unprojImgPt);
-		warpPerspective(srcImg, unprjImg, unprojTrans, unprojImgSize,INTER_LINEAR);
+		warpPerspective(srcImg, unprjImg, unprojTrans, unprojImgSize, INTER_LINEAR);
 	}
 
-	void DoSingleImgReproj(const Mat& srcImg, Mat& reprjImg, vector<Point2f>& reprojImgPt)
+	void DoSingleImgReproj(const Mat &srcImg, Mat &reprjImg, vector<Point2f> &reprojImgPt)
 	{
-		Mat reprojTrans = findHomography(this->unprojImgPt,this->srcImgPt);
-		warpPerspective(srcImg, reprjImg, reprojTrans, srcImg.size(),INTER_LINEAR);
+		Mat reprojTrans = findHomography(this->unprojImgPt, this->srcImgPt);
+		warpPerspective(srcImg, reprjImg, reprojTrans, srcImg.size(), INTER_LINEAR);
 
 		int l = (int)srcImgPt.size();
 		vector<Point2f>().swap(reprojImgPt);
-		for (int j = 0; j < l; j++) 
+		for (int j = 0; j < l; j++)
 		{
 			Mat a = (Mat_<double>(3, 1) << srcImgPt[j].x, srcImgPt[j].y, 1);
 			Mat y = reprojTrans * a;
@@ -833,22 +870,22 @@ struct unProjectTransData
 		}
 	}
 
-	void GetReprojTrans(Mat& reprojTrans)
+	void GetReprojTrans(Mat &reprojTrans)
 	{
 		reprojTrans = findHomography(this->unprojImgPt, this->srcImgPt);
 	}
 };
 
-//¼ìĞ£Îó²îÊı¾İ
+//ï¿½ï¿½Ğ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 struct CalibErrorData
 {
-	vector<vector<Mat>> imgResiduals;//·´Í¶µ½Ó°ÏñÉÏµÄ²Ğ²î£¬ÏÈÏà»úºóÓ°Ïñ
-	vector<vector<double>> imgRMS;//Í³¼ÆÖĞÎó²î£¬ÏÈÏà»úºóÓ°Ïñ
-	vector<double> camRMS;//Ïà»ú¼ìĞ£ÖĞÎó²î
-	CaliPtType ptType;//¼ìĞ£µãÀàĞÍ£¬ÈıÖÖ
+	vector<vector<Mat>> imgResiduals; //ï¿½ï¿½Í¶ï¿½ï¿½Ó°ï¿½ï¿½ï¿½ÏµÄ²Ğ²î£¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó°ï¿½ï¿½
+	vector<vector<double>> imgRMS;	  //Í³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½î£¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó°ï¿½ï¿½
+	vector<double> camRMS;			  //ï¿½ï¿½ï¿½ï¿½ï¿½Ğ£ï¿½ï¿½ï¿½ï¿½ï¿½
+	CaliPtType ptType;				  //ï¿½ï¿½Ğ£ï¿½ï¿½ï¿½ï¿½ï¿½Í£ï¿½ï¿½ï¿½ï¿½ï¿½
 	int camCnt;
 
-	//Çå¿ÕÊı¾İ
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	void ClearData()
 	{
 		if (imgResiduals.size() > 0)
@@ -874,7 +911,7 @@ struct CalibErrorData
 			camRMS[i] = 0.0;
 	}
 
-	void AddImgData(int camNo, const Mat& oneRes, const double oneRms)
+	void AddImgData(int camNo, const Mat &oneRes, const double oneRms)
 	{
 		assert(camNo >= 0 && camNo - camCnt < 0);
 
@@ -898,10 +935,10 @@ struct CameraInitial
 
 struct Pos
 {
-	double R[9] = { 1,0,0,0,1,0,0,0,1 };
-	double T[3] = { 0,0,0 };
-	double Eulor[3] = { 0,0,0 };
-	double rvec[3] = { 0,0,0 };
+	double R[9] = {1, 0, 0, 0, 1, 0, 0, 0, 1};
+	double T[3] = {0, 0, 0};
+	double Eulor[3] = {0, 0, 0};
+	double rvec[3] = {0, 0, 0};
 
 	void Mat2Eulor()
 	{
@@ -947,34 +984,34 @@ struct MultiCameraPara
 	vector<Pos> relPos2Cam0List;
 };
 
-//µ¥Ïà»ú¼ìĞ£
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ£
 struct SingleCalibCamera
 {
-	//¼ìĞ£½á¹û£¬Íâ²Î
+	//ï¿½ï¿½Ğ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	vector<Mat> tvecsMat, rvecsMat;
-	//¼ìĞ£½á¹û£¬ÄÚ²Î
+	//ï¿½ï¿½Ğ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú²ï¿½
 	Mat cameraMatrix, distCoeffs;
-	//Ïà»úÀàĞÍ
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	CameraType camType;
-	//¼ìĞ£Îó²îÊı¾İ
+	//ï¿½ï¿½Ğ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	CalibErrorData errData;
 
-	//Ïû³ı»û±äÏà¹Ø
-	Mat mapX, mapY,R;
-	//¼ìĞ£²ÎÊı
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	Mat mapX, mapY, R;
+	//ï¿½ï¿½Ğ£ï¿½ï¿½ï¿½ï¿½
 	int flag = 0;
 	TermCriteria criteria = TermCriteria(
 		TermCriteria::COUNT + TermCriteria::EPS,
 		30, DBL_EPSILON);
-	//³õÊ¼»¯¼ìĞ£²ÎÊı
+	//ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Ğ£ï¿½ï¿½ï¿½ï¿½
 	void InitCalibration(int f, TermCriteria c)
 	{
 		flag = f;
 		criteria = c;
 	}
 
-	//»ñÈ¡ÄÚ²Î½á¹û
-	void GetCameraPara(InnPara& para)
+	//ï¿½ï¿½È¡ï¿½Ú²Î½ï¿½ï¿½
+	void GetCameraPara(InnPara &para)
 	{
 		para.fx = cameraMatrix.at<double>(0, 0);
 		para.fy = cameraMatrix.at<double>(1, 1);
@@ -987,78 +1024,34 @@ struct SingleCalibCamera
 		para.p2 = distCoeffs.at<double>(0, 3);
 	}
 
-	//Ö´ĞĞ¼ìĞ£¼ÆËã
-	double DoCalibration(CalibImageData data,Size imageSize)
+	//Ö´ï¿½Ğ¼ï¿½Ğ£ï¿½ï¿½ï¿½ï¿½
+	double DoCalibration(CalibImageData data, Size imageSize)
 	{
 		assert(data.imgPts.size() > 0 && data.objPts.size() > 0 && data.imgPts.size() == data.objPts.size());
 
-		tvecsMat.clear(); rvecsMat.clear();
-		double rms = calibrateCamera(data.objPts, data.imgPts, imageSize, 
-			cameraMatrix, distCoeffs, rvecsMat, tvecsMat,
-			flag,criteria);
-
-		errData.ClearData();
-		errData.SetData(1);
-
-		double total_err = 0, err = 0;
-		vector <Point2f> image_points2; // ±£´æÖØĞÂ¼ÆËãµÃµ½µÄÍ¶Ó°µã
-		for (int i = 0; i < data.imgPts.size(); i++) {
-			vector<Point3f> tmpPointSet = data.objPts[i];
-			projectPoints(tmpPointSet, rvecsMat[i], tvecsMat[i], 
-				cameraMatrix, distCoeffs, image_points2);
-
-			vector<Point2f> tmpImagePoint = data.imgPts[i];
-			Mat tmpImagePointMat = Mat(1, tmpImagePoint.size(), CV_32FC2);
-			Mat image_points2Mat = Mat(1, image_points2.size(), CV_32FC2);
-			int ln = (int)tmpImagePoint.size();
-			for (int j = 0; j < ln; j++) {
-				image_points2Mat.at<Vec2f>(0, j) = Vec2f(image_points2[j].x, image_points2[j].y);
-				tmpImagePointMat.at<Vec2f>(0, j) = Vec2f(tmpImagePoint[j].x, tmpImagePoint[j].y);
-			}
-
-			err = norm(image_points2Mat, tmpImagePointMat, NORM_L2);
-			err /= ln;
-
-			errData.AddImgData(0,image_points2Mat - tmpImagePointMat,sqrt(err));
-			total_err += err;			
-		}
-
-		total_err /= data.imgPts.size();
-		errData.CalCameraRMS();
-
-		return total_err;
-	}
-
-	double DoCalibration(CameraInitial initial,CalibImageData data, Size imageSize)
-	{
-		assert(data.imgPts.size() > 0 && data.objPts.size() > 0 && data.imgPts.size() == data.objPts.size());
-
-		cameraMatrix = Mat::eye(3,3,CV_64FC1);
-		cameraMatrix.at<double>(0, 0) = initial.focal / initial.camInfo.first;
-		cameraMatrix.at<double>(1, 1) = initial.focal / initial.camInfo.first;
-		cameraMatrix.at<double>(0, 2) = imageSize.width/2;
-		cameraMatrix.at<double>(1, 2) = imageSize.height/2;
-
-		tvecsMat.clear(); rvecsMat.clear();
+		tvecsMat.clear();
+		rvecsMat.clear();
 		double rms = calibrateCamera(data.objPts, data.imgPts, imageSize,
-			cameraMatrix, distCoeffs, rvecsMat, tvecsMat,
-			flag, criteria);
+									 cameraMatrix, distCoeffs, rvecsMat, tvecsMat,
+									 flag, criteria);
 
 		errData.ClearData();
 		errData.SetData(1);
 
 		double total_err = 0, err = 0;
-		vector <Point2f> image_points2; // ±£´æÖØĞÂ¼ÆËãµÃµ½µÄÍ¶Ó°µã
-		for (int i = 0; i < data.imgPts.size(); i++) {
+		vector<Point2f> image_points2; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½Í¶Ó°ï¿½ï¿½
+		for (int i = 0; i < data.imgPts.size(); i++)
+		{
 			vector<Point3f> tmpPointSet = data.objPts[i];
 			projectPoints(tmpPointSet, rvecsMat[i], tvecsMat[i],
-				cameraMatrix, distCoeffs, image_points2);
+						  cameraMatrix, distCoeffs, image_points2);
 
 			vector<Point2f> tmpImagePoint = data.imgPts[i];
 			Mat tmpImagePointMat = Mat(1, tmpImagePoint.size(), CV_32FC2);
 			Mat image_points2Mat = Mat(1, image_points2.size(), CV_32FC2);
 			int ln = (int)tmpImagePoint.size();
-			for (int j = 0; j < ln; j++) {
+			for (int j = 0; j < ln; j++)
+			{
 				image_points2Mat.at<Vec2f>(0, j) = Vec2f(image_points2[j].x, image_points2[j].y);
 				tmpImagePointMat.at<Vec2f>(0, j) = Vec2f(tmpImagePoint[j].x, tmpImagePoint[j].y);
 			}
@@ -1076,7 +1069,57 @@ struct SingleCalibCamera
 		return total_err;
 	}
 
-	//³õÊ¼»¯»û±ä¾ÀÕı²ÎÊı
+	double DoCalibration(CameraInitial initial, CalibImageData data, Size imageSize)
+	{
+		assert(data.imgPts.size() > 0 && data.objPts.size() > 0 && data.imgPts.size() == data.objPts.size());
+
+		cameraMatrix = Mat::eye(3, 3, CV_64FC1);
+		cameraMatrix.at<double>(0, 0) = initial.focal / initial.camInfo.first;
+		cameraMatrix.at<double>(1, 1) = initial.focal / initial.camInfo.first;
+		cameraMatrix.at<double>(0, 2) = imageSize.width / 2;
+		cameraMatrix.at<double>(1, 2) = imageSize.height / 2;
+
+		tvecsMat.clear();
+		rvecsMat.clear();
+		double rms = calibrateCamera(data.objPts, data.imgPts, imageSize,
+									 cameraMatrix, distCoeffs, rvecsMat, tvecsMat,
+									 flag, criteria);
+
+		errData.ClearData();
+		errData.SetData(1);
+
+		double total_err = 0, err = 0;
+		vector<Point2f> image_points2; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½Í¶Ó°ï¿½ï¿½
+		for (int i = 0; i < data.imgPts.size(); i++)
+		{
+			vector<Point3f> tmpPointSet = data.objPts[i];
+			projectPoints(tmpPointSet, rvecsMat[i], tvecsMat[i],
+						  cameraMatrix, distCoeffs, image_points2);
+
+			vector<Point2f> tmpImagePoint = data.imgPts[i];
+			Mat tmpImagePointMat = Mat(1, tmpImagePoint.size(), CV_32FC2);
+			Mat image_points2Mat = Mat(1, image_points2.size(), CV_32FC2);
+			int ln = (int)tmpImagePoint.size();
+			for (int j = 0; j < ln; j++)
+			{
+				image_points2Mat.at<Vec2f>(0, j) = Vec2f(image_points2[j].x, image_points2[j].y);
+				tmpImagePointMat.at<Vec2f>(0, j) = Vec2f(tmpImagePoint[j].x, tmpImagePoint[j].y);
+			}
+
+			err = norm(image_points2Mat, tmpImagePointMat, NORM_L2);
+			err /= ln;
+
+			errData.AddImgData(0, image_points2Mat - tmpImagePointMat, sqrt(err));
+			total_err += err;
+		}
+
+		total_err /= data.imgPts.size();
+		errData.CalCameraRMS();
+
+		return total_err;
+	}
+
+	//ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	void InitUndistor(Size imageSize)
 	{
 		assert(imageSize.width > 0 && imageSize.height > 0);
@@ -1087,19 +1130,19 @@ struct SingleCalibCamera
 		initUndistortRectifyMap(this->cameraMatrix, this->distCoeffs, R, this->cameraMatrix, imageSize, CV_32FC1, mapX, mapY);
 	}
 
-	//³õÊ¼»¯Ö¸¶¨Ó°ÏñµÄ´øĞı×ªµÄ»û±ä¾ÀÕı²ÎÊı
+	//ï¿½ï¿½Ê¼ï¿½ï¿½Ö¸ï¿½ï¿½Ó°ï¿½ï¿½Ä´ï¿½ï¿½ï¿½×ªï¿½Ä»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	void InitUndistor(Size imageSize, int imgNum)
 	{
 		assert(imgNum >= 0 && imgNum - tvecsMat.size() < 0);
 
 		mapX = Mat(imageSize, CV_32FC1);
 		mapY = Mat(imageSize, CV_32FC1);
-		R = rvecsMat[imgNum];// Mat::eye(3, 3, CV_32F);
+		R = rvecsMat[imgNum]; // Mat::eye(3, 3, CV_32F);
 		initUndistortRectifyMap(this->cameraMatrix, this->distCoeffs, R, this->cameraMatrix, imageSize, CV_32FC1, mapX, mapY);
 	}
 
-	//Ö´ĞĞµ¥ÕÅÓ°ÏñµÄ»û±ä¾ÀÕı
-	void DoSingleUndistort(const Mat& srcImg,Mat& undistortImg)
+	//Ö´ï¿½Ğµï¿½ï¿½ï¿½Ó°ï¿½ï¿½Ä»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	void DoSingleUndistort(const Mat &srcImg, Mat &undistortImg)
 	{
 		assert(mapX.size().width > 0 && mapX.size().height > 0);
 		assert(mapY.size().width > 0 && mapY.size().height > 0);
@@ -1108,33 +1151,33 @@ struct SingleCalibCamera
 	}
 };
 
-//¶àÏà»ú¼ìĞ££¬°üÀ¨Ë«Ïà»ú¼°Á½¸öÒÔÉÏµÄÏà»ú
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½ï¿½
 struct MultiCalibCameras
 {
-	//µ¥Ïà»ú¼ìĞ£
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ£
 	vector<SingleCalibCamera> cameras;
-	//Ïà¶Ô²ÎÊı£¬¾ùÊÇÏà¶ÔÓÚ0ºÅÏà»ú
+	//ï¿½ï¿½Ô²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½0ï¿½ï¿½ï¿½ï¿½ï¿½
 	vector<Mat> relR, relT;
-	//¼ìĞ£Îó²îÊı¾İ
+	//ï¿½ï¿½Ğ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	CalibErrorData errData;
 
-	//Á¢Ìå¼ìĞ£²ÎÊı
+	//ï¿½ï¿½ï¿½ï¿½ï¿½Ğ£ï¿½ï¿½ï¿½ï¿½
 	int flag = CALIB_FIX_INTRINSIC;
 	TermCriteria criteria = TermCriteria(
 		TermCriteria::COUNT + TermCriteria::EPS,
 		20000, DBL_EPSILON);
 
-	//³õÊ¼»¯Ïà»úÁĞ±í
+	//ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ±ï¿½
 	void InitCameraList(const vector<SingleCalibCamera> camList)
 	{
 		int camCnt = camList.size();
-		if(cameras.size()>0)
+		if (cameras.size() > 0)
 			vector<SingleCalibCamera>().swap(cameras);
-		
-		cameras.insert(cameras.end(),camList.begin(),camList.end());
+
+		cameras.insert(cameras.end(), camList.begin(), camList.end());
 	}
 
-	//³õÊ¼»¯µ¥Ïà»ú¼ìĞ£µÄ²ÎÊı
+	//ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ£ï¿½Ä²ï¿½ï¿½ï¿½
 	void InitSingleCalibration(int f, TermCriteria c)
 	{
 		for (int i = 0; i < cameras.size(); i++)
@@ -1143,23 +1186,23 @@ struct MultiCalibCameras
 		}
 	}
 
-	//³õÊ¼»¯Á¢Ìå»ú¼ìĞ£µÄ²ÎÊı
+	//ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ£ï¿½Ä²ï¿½ï¿½ï¿½
 	void InitStereoCalibration(int f, TermCriteria c)
 	{
 		flag = f;
 		criteria = c;
 	}
 
-	//»ñÈ¡Ö¸¶¨Ïà»úµÄÄÚ²Î
-	void GetCameraPara(int camNo,InnPara& para)
+	//ï¿½ï¿½È¡Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú²ï¿½
+	void GetCameraPara(int camNo, InnPara &para)
 	{
 		int camCnt = cameras.size();
-		assert(camNo < camCnt&& camNo >= 0);
+		assert(camNo < camCnt && camNo >= 0);
 		cameras[camNo].GetCameraPara(para);
 	}
 
-	//»ñÈ¡ËùÓĞÏà»úµÄÄÚ²Î
-	void GetCameraPara(vector<InnPara>& paraList)
+	//ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú²ï¿½
+	void GetCameraPara(vector<InnPara> &paraList)
 	{
 		int camCnt = cameras.size();
 		if (paraList.size() > 0)
@@ -1173,26 +1216,26 @@ struct MultiCalibCameras
 		}
 	}
 
-	//»ñÈ¡Ö¸¶¨Ïà»úÏà¶ÔÓÚ0ºÅÏà»úµÄÏà¶Ô×ËÌ¬
-	void GetOneRelCamPos(int camNo, Pos& relPos)
+	//ï¿½ï¿½È¡Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½0ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¬
+	void GetOneRelCamPos(int camNo, Pos &relPos)
 	{
 		int camCnt = cameras.size();
-		assert(camNo < camCnt&& camNo > 0);
+		assert(camNo < camCnt && camNo > 0);
 
 		relPos.T[0] = relT[camNo - 1].at<double>(0, 0);
 		relPos.T[1] = relT[camNo - 1].at<double>(0, 1);
 		relPos.T[2] = relT[camNo - 1].at<double>(0, 2);
-		memcpy(relPos.R,relR[camNo - 1].data,9*sizeof(double));
-		relPos.Mat2Eulor(); 
+		memcpy(relPos.R, relR[camNo - 1].data, 9 * sizeof(double));
+		relPos.Mat2Eulor();
 		relPos.Mat2RVec();
 	}
 
-	//»ñÈ¡ËùÓĞÏà»úÏà¶ÔÓÚ0ºÅÏà»úµÄÏà¶Ô×ËÌ¬
-	void GetAllRelCamPos(vector<Pos>& relPosList)
+	//ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½0ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¬
+	void GetAllRelCamPos(vector<Pos> &relPosList)
 	{
 		int relCnt = relT.size();
 
-		if(relPosList.size()>0)
+		if (relPosList.size() > 0)
 			vector<Pos>().swap(relPosList);
 
 		Pos relPos;
@@ -1209,26 +1252,27 @@ struct MultiCalibCameras
 		}
 	}
 
-	//Ö´ĞĞµ¥Ïà»ú¼ìĞ£
-	double DoSingleCalibration(int camNo,CalibImageData data, Size imageSize)
+	//Ö´ï¿½Ğµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ£
+	double DoSingleCalibration(int camNo, CalibImageData data, Size imageSize)
 	{
 		int camCnt = cameras.size();
-		assert(camNo < camCnt&& camNo >= 0);
-		cameras[camNo].tvecsMat.clear(); cameras[camNo].rvecsMat.clear();
-		double rms = cameras[camNo].DoCalibration(data,imageSize);
+		assert(camNo < camCnt && camNo >= 0);
+		cameras[camNo].tvecsMat.clear();
+		cameras[camNo].rvecsMat.clear();
+		double rms = cameras[camNo].DoCalibration(data, imageSize);
 		return rms;
 	}
-	double DoSingleCalibration(int camNo,CameraInitial initial, CalibImageData data, Size imageSize)
+	double DoSingleCalibration(int camNo, CameraInitial initial, CalibImageData data, Size imageSize)
 	{
 		int camCnt = cameras.size();
-		assert(camNo < camCnt&& camNo >= 0);
+		assert(camNo < camCnt && camNo >= 0);
 
-		double rms = cameras[camNo].DoCalibration(initial,data, imageSize);
+		double rms = cameras[camNo].DoCalibration(initial, data, imageSize);
 		return rms;
 	}
 
-	//Ö´ĞĞÁ¢Ìå¼ìĞ££¬¼´ÏÈµ¥Ïà»úÔÙÏà¶Ô
-	double DoStereoCalibration(vector<CalibImageData> allSingleData, vector<StereoCalibImageData> allStereoData,vector<Size> allImgSize)
+	//Ö´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ£ï¿½ï¿½ï¿½ï¿½ï¿½Èµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	double DoStereoCalibration(vector<CalibImageData> allSingleData, vector<StereoCalibImageData> allStereoData, vector<Size> allImgSize)
 	{
 		int camCnt = cameras.size();
 		assert(camCnt - allSingleData.size() == 0 && camCnt - allImgSize.size() == 0);
@@ -1242,23 +1286,23 @@ struct MultiCalibCameras
 		//rmsSingle = sqrt(rmsSingle / camCnt);
 
 		Mat E, F;
-		Mat R = Mat_<float>::zeros(3,3);
-		Mat T = Mat_<float>::zeros(3,1);
+		Mat R = Mat_<float>::zeros(3, 3);
+		Mat T = Mat_<float>::zeros(3, 1);
 		double rmsStereo = 0.0;
 		for (int i = 1; i < camCnt; i++)
 		{
-			double rms2 = stereoCalibrate(allStereoData[i-1].objPts,allStereoData[i-1].imgLPts,allStereoData[i-1].imgRPts,
-				cameras[0].cameraMatrix,cameras[0].distCoeffs,cameras[i].cameraMatrix,cameras[i].distCoeffs,
-				allImgSize[i],R,T,E,F,flag,criteria);
+			double rms2 = stereoCalibrate(allStereoData[i - 1].objPts, allStereoData[i - 1].imgLPts, allStereoData[i - 1].imgRPts,
+										  cameras[0].cameraMatrix, cameras[0].distCoeffs, cameras[i].cameraMatrix, cameras[i].distCoeffs,
+										  allImgSize[i], R, T, E, F, flag, criteria);
 			rmsStereo += rms2 * rms2;
-			relR.push_back(R); 
+			relR.push_back(R);
 			relT.push_back(T);
 		}
 		rmsStereo = sqrt(rmsStereo / ((double)camCnt - 1));
 		return rmsStereo;
 	}
 
-	double DoStereoCalibration(vector<CameraInitial> initials,vector<CalibImageData> allSingleData, vector<StereoCalibImageData> allStereoData, vector<Size> allImgSize)
+	double DoStereoCalibration(vector<CameraInitial> initials, vector<CalibImageData> allSingleData, vector<StereoCalibImageData> allStereoData, vector<Size> allImgSize)
 	{
 		int camCnt = cameras.size();
 		assert(camCnt - allSingleData.size() == 0 && camCnt - allImgSize.size() == 0);
@@ -1266,7 +1310,7 @@ struct MultiCalibCameras
 		double rmsSingle = 0.0;
 		for (int i = 0; i < camCnt; i++)
 		{
-			double rms = cameras[i].DoCalibration(initials[i],allSingleData[i], allImgSize[i]);
+			double rms = cameras[i].DoCalibration(initials[i], allSingleData[i], allImgSize[i]);
 			rmsSingle += rms * rms;
 		}
 		rmsSingle = sqrt(rmsSingle / camCnt);
@@ -1278,8 +1322,8 @@ struct MultiCalibCameras
 		for (int i = 1; i < camCnt; i++)
 		{
 			double rms2 = stereoCalibrate(allStereoData[i - 1].objPts, allStereoData[i - 1].imgLPts, allStereoData[i - 1].imgRPts,
-				cameras[0].cameraMatrix, cameras[0].distCoeffs, cameras[i].cameraMatrix, cameras[i].distCoeffs,
-				allImgSize[i], R, T, E, F, flag, criteria);
+										  cameras[0].cameraMatrix, cameras[0].distCoeffs, cameras[i].cameraMatrix, cameras[i].distCoeffs,
+										  allImgSize[i], R, T, E, F, flag, criteria);
 			rmsStereo += rms2 * rms2;
 			relR.push_back(R);
 			relT.push_back(T);
@@ -1287,27 +1331,27 @@ struct MultiCalibCameras
 		rmsStereo = sqrt(rmsStereo / ((double)camCnt - 1));
 	}
 
-	//³õÊ¼»¯Ö¸¶¨Ïà»úµÄ»û±ä¾ÀÕı²ÎÊı
+	//ï¿½ï¿½Ê¼ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	void InitUndistor(int camNo, Size imageSize)
 	{
 		int camCnt = cameras.size();
-		assert(camNo < camCnt&& camNo >= 0);
+		assert(camNo < camCnt && camNo >= 0);
 		cameras[camNo].InitUndistor(imageSize);
 	}
 
-	//³õÊ¼»¯Ö¸¶¨Ïà»úÖ¸¶¨Ó°ÏñµÄ´øĞı×ªµÄ»û±ä¾ÀÕı²ÎÊı
+	//ï¿½ï¿½Ê¼ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½Ó°ï¿½ï¿½Ä´ï¿½ï¿½ï¿½×ªï¿½Ä»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	void InitUndistor(int camNo, Size imageSize, int imgNum)
 	{
 		int camCnt = cameras.size();
-		assert(camNo < camCnt&& camNo >= 0);
+		assert(camNo < camCnt && camNo >= 0);
 		cameras[camNo].InitUndistor(imageSize, imgNum);
 	}
 
-	//Ö´ĞĞµ¥ÕÅÓ°ÏñµÄ»û±ä¾ÀÕı
-	void DoSingleUndistort(int camNo, const Mat& srcImg, Mat& undistortImg)
+	//Ö´ï¿½Ğµï¿½ï¿½ï¿½Ó°ï¿½ï¿½Ä»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	void DoSingleUndistort(int camNo, const Mat &srcImg, Mat &undistortImg)
 	{
 		int camCnt = cameras.size();
-		assert(camNo < camCnt&& camNo >= 0);
+		assert(camNo < camCnt && camNo >= 0);
 		cameras[camNo].DoSingleUndistort(srcImg, undistortImg);
 	}
 };
@@ -1328,36 +1372,36 @@ struct CaliProject
 	int maxIterCnt = 10;
 	int camCnt = 1;
 
-	//°ßµã¼ì²âãĞÖµ
+	//ï¿½ßµï¿½ï¿½ï¿½ï¿½ï¿½Öµ
 	SimpleBlobDetector::Params params;
-	//°ßµã¼ì²âÖ¸Õë
+	//ï¿½ßµï¿½ï¿½ï¿½Ö¸ï¿½ï¿½
 	Ptr<SimpleBlobDetector> detector;
 
-	//´¦ÀíµÄÓ°ÏñÊıÄ¿
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó°ï¿½ï¿½ï¿½ï¿½Ä¿
 	int procImgCnt;
 
 	vector<CameraInitial> caliInitials;
 
-	//³õÊ¼»¯°ßµã¼ì²â
+	//ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ßµï¿½ï¿½ï¿½
 	void InitBlobDetector()
 	{
-		//ãĞÖµ¿ØÖÆ
+		//ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½
 		params.thresholdStep = 5;
 		params.minThreshold = 10;
 		params.maxThreshold = 200;
 		params.filterByColor = true;
 		params.blobColor = 0;
-		//ÏñËØÃæ»ı´óĞ¡¿ØÖÆ
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ¡ï¿½ï¿½ï¿½ï¿½
 		params.filterByArea = true;
 		params.minArea = 50;
 		params.maxArea = 30000;
-		//ĞÎ×´£¨Í¹£©
+		//ï¿½ï¿½×´ï¿½ï¿½Í¹ï¿½ï¿½
 		params.filterByCircularity = false;
 		params.minCircularity = 0.7;
-		//ĞÎ×´£¨°¼£©
+		//ï¿½ï¿½×´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		params.filterByConvexity = false;
 		params.minConvexity = 0.9;
-		//ĞÎ×´£¨Ô°£©
+		//ï¿½ï¿½×´ï¿½ï¿½Ô°ï¿½ï¿½
 		params.filterByInertia = true;
 		params.minInertiaRatio = 0.4;
 
@@ -1365,7 +1409,7 @@ struct CaliProject
 		procImgCnt = 0;
 	}
 
-	//³õÊ¼»¯×ÓÎÄ¼ş¼Ğ
+	//ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
 	void InitDetectSubDir(int camCnt)
 	{
 		vector<string>().swap(tmpFolders);
